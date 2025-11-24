@@ -45,7 +45,7 @@ e f d d d d f f d d d d f e
 . e e f f f e e f f f e e . 
 e d d e f 5 e e f f e d d e 
 e d d e f f e e f f e d d e 
-. . . . c c c c c c . . . . 
+. e e . c c c c c c . e e . 
 . . . . c . . . . c . . . . 
 . . . . c . . . . c . . . . 
 `, img`
