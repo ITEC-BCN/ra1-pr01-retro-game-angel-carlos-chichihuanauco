@@ -4,7 +4,6 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterAnimationsEnabled(mySprite, false)
     if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight))) {
-        scene.cameraFollowSprite(null)
         animation.runImageAnimation(
         mySprite,
         assets.animation`dodge_roll_rigth`,
@@ -13,10 +12,39 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         )
         pause(650)
         dodge_roll = false
+        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingRight))
+    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingLeft))) {
+        animation.runImageAnimation(
+        mySprite,
+        assets.animation`dodge_roll_left`,
+        80,
+        false
+        )
+        pause(650)
+        dodge_roll = false
+        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingLeft))
+    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingDown))) {
+        animation.runImageAnimation(
+        mySprite,
+        assets.animation`dodge_roll_front`,
+        80,
+        false
+        )
+        pause(650)
+        dodge_roll = false
+        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
+    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingUp))) {
+        animation.runImageAnimation(
+        mySprite,
+        assets.animation`dodge_roll_back`,
+        80,
+        false
+        )
+        pause(650)
+        dodge_roll = false
+        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
     }
     if (!(dodge_roll)) {
-        scene.cameraFollowSprite(mySprite)
-        characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingRight))
         characterAnimations.setCharacterAnimationsEnabled(mySprite, true)
     }
 })
