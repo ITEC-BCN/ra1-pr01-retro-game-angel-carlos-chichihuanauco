@@ -1505,187 +1505,146 @@ edde....feddeeeeee...
 ...........c.........
 .....................
 `];
-            case "death_player":
+            case "cultistAnimation":
             case "anim13":return [img`
-.......eee22....
-.......ee2ff....
-..ffffffee2ee...
-.ffffffefe22ef..
-.ffffddddddddf..
-.ffffdddddddde..
-.ffffdfdddddfe..
-.feefdfdddddfe..
-.fedfdddfffdde..
-.feeddddfffdde..
+. . . . . . . . . . . . . . 
+. . c c a a a a a a c . . . 
+. c c c a a a a a a a c . . 
+c c c c c a c c c c a a . . 
+c f f f f f f f f f c c . . 
+c f f f f f f f f f f c c . 
+c f 4 f f f f f 4 f f c c . 
+c f f f f f f f f f f c c . 
+c c f f f f f f f c c c . . 
+. c c f f f f f c c c f . . 
+. f f f f f f f f f f c . . 
+. c a a a f a a a c c c . . 
+. e 4 4 4 4 4 4 4 e e . . . 
+. a a a 4 f 4 a c c c c . . 
+. a a a 4 f a a c c c c c . 
+. a a a a f a a c c c c c . 
+`, img`
+. . c c a a a a a a a c c . 
+. c c c a a a a a a a a c c 
+c c c c c a c c c c c a a a 
+c c f f c c f f f f c a c c 
+c f f f f f f f f f f c c c 
+c f f f f f f f f f f f c c 
+c f 4 f f f f f f 4 f f c c 
+c f f f f f f f f f f f c c 
+c f f f f f f f f f f c c c 
+c c f f f f f f f f c c c c 
+f c c f f f f f f c c c f f 
+. c a a a f a a a a c c c . 
+. c a a a f a a a a c c c . 
+c e 4 4 4 4 4 4 4 4 e e e . 
+c a a a 4 f 4 a a c c c c c 
+c a a a a f a a a c c c c . 
+`, img`
+. . . c c a a a a a a a c . 
+. . c c c a a a a a a a a c 
+. c c c c c a c c c c c a a 
+. c c f f c c f f f f c a c 
+. c f f f f f f f f f f c c 
+. c f f f f f f f f f f f c 
+. c f f f f f f f f f f f c 
+. c f 4 f f f f f f 4 f f c 
+. c f f f f f f f f f f c c 
+. f c f f f f f f f f c c f 
+. . f c f f f f f f c c f c 
+. . c f f f f f f f f f c c 
+. . c a a a f a a a a c c . 
+. . e 4 4 4 4 4 4 4 4 e e . 
+. c a a a 4 f 4 a a c c c c 
+. c a a a 4 f a a a c c c c 
+`, img`
+. . c c a a a a a a a c . . 
+. c c c a a a a a a a a c . 
+c c c c c a c c c c c a a c 
+c c f f c c f f f f c a c c 
+c f f f f f f f f f f c c c 
+c f f f f f f f f f f f c c 
+c f 4 f f f f f f 4 f f c c 
+c f f f f f f f f f f f c c 
+f c f f f f f f f f c c f c 
+. f c f f f f f f c c f c c 
+. c f f f f f f f f f c c c 
+. c a a a f a a a a c c c c 
+. e 4 4 4 4 4 4 4 4 e e . . 
+c a a a 4 f 4 a a c c c . . 
+c a a a 4 f a a a c c c c . 
+c a a a 4 f a a a c c c c . 
+`];
+            case "bullet_animation":
+            case "anim14":return [img`
+......bbbb......
+.....bbbbbb.....
+....bbfdccbb....
+...bbdfdcccbb...
+...bbbdbbccbb...
+..bbdfdbbbccbb..
+..bbdfdbbbccbb..
+..bbbddbbccbbb..
 ...eeeeeeeeee...
-....ffeeeeef....
-...eefeeddefe...
-eeeeeffeeeefeee.
-ddeefffeeee5edde
-dde.fffeeeefedde
-ee..fffeeeef.ee.
-.....cccccc.....
-.....c....c.....
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..4f5dffff54f4..
+..445dd5555444..
+..2eeeeeeeeee2..
+..445dd5555444..
+.24444444444442.
+.22e5effffe5e22.
 `, img`
-......eee22.....
-......ee2ff.....
-..fffffefe22e...
-.ffffddddddddf..
-.ffffdfdddddff..
-.ffffdfdddddfe..
-.ffffdddfffdde..
-.feefdddfffdde..
-.fedfdddfffdde..
-.feeddddfffdde..
+......bbbb......
+.....bbbbbb.....
+....bbfdccbb....
+...bbdfdcccbb...
+...bbbdbbccbb...
+..bbdfdbbbccbb..
+..bbdfdbbbccbb..
+..bbbddbbccbbb..
 ...eeeeeeeeee...
-....ffeeeeef....
-eeeeefeeddefe.ee
-ddeeeffeeeefeedd
-dde.fffeeee5.edd
-ee..fffeeeef..ee
-....fffeeeef....
-.....cccccc.....
-.....c....c.....
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..4f5dffff54f4..
+..445dd5555444..
+..2eeeeeeeeee2..
+.2445dd55554442.
+2244444444444422
+22fe5effffe5ef22
 `, img`
-......eee2ff....
-..ffffffee2ee...
-.ffffffefe22ef..
-.ffffddddddddf..
-.ffffdfdddddfe..
-.ffffddfdddfde..
-.feefdddfffdde..
-.fedfdddfffdde..
-.feeddddddddde..
-..edddddddddde..
+................
+......bbbb......
+.....bbbbbb.....
+....bb.dccbb....
+...bbd.dcccbb...
+...bbbdbbccbb...
+..bbd.dbbbccbb..
+..bbd.dbbbccbb..
+..bbbddbbccbbb..
 ...eeeeeeeeee...
-.....ffeeeeef...
-....eefeeddefe..
-..eeeeffeeeefeee
-.eddefffeeee5edd
-.eddefffeeeefedd
-..ee.fffeeeef.ee
-......cccccc....
-.....cc...cc....
-`, img`
-......eeee2f....
-......eee2ff....
-..ffffffee2ee...
-.ffffffefe22ef..
-.ffffddddddddf..
-.ffffdfdddddfe..
-.ffffddfdddfde..
-.feefdddfffdde..
-.fedfdddfffdde..
-.feeddddddddde..
-..edddddddddde..
-...eeeeeeeeee...
-.....ffeeeeef...
-....eefeeddefe..
-..eeeeffeeeefeee
-.eddefffeeee5edd
-.eddefffeeeefedd
-..ee.fffeeeef.ee
-.....ccc..ccc...
-`, img`
-................
-......eeee22....
-......eee2ff....
-..ffffffee2ee...
-.ffffffefe22ef..
-.ffffddddddddf..
-.ffffdfdddddfe..
-.ffffddfdddfde..
-.feefdddfffdde..
-.fedfdddfffdde..
-.feeddddddddde..
-..edddddddddde..
-...eeeeeeeeee...
-....ffeeeeef....
-...eefeeddefe...
-.eeeeffeeeefeee.
-eddefffeeee5edde
-eddefffeeeefedde
-.ee.ccc..ccc.ee.
-`, img`
-................
-................
-....fffffffff...
-...ffffeeee22f..
-..fffffeee2ffff.
-..fffffffee2eef.
-..ffffffefe22ef.
-..ffffdddddddde.
-..feefdddddddde.
-..fedfdfdddddfe.
-..feeddffdddffe.
-...edddddfff44e.
-....eeeeeeeeee..
-...eefee44efe...
-...eeffeeeefe...
-....eefeeeefee..
-...eddeeeeeedde.
-...eddeeeeeedde.
-....eec..cc.ee..
-`, img`
-................
-................
-................
-....fffffffff...
-...ffffeeee22f..
-..fffffeeee22ff.
-..fffffeee22fff.
-..fffffffe22eef.
-..feefffee222ef.
-..fedfddeee22ee.
-..feefdddddddde.
-..fedddddddddde.
-...edddffdddffe.
-....eeeeeeeeee..
-...effeeeefe....
-...fffeeeeff....
-...eefeeeefee...
-..eddeeeeeedde..
-..edde..ccedde..
-`, img`
-................
-................
-................
-................
-....fffffffff...
-...fffffffffff..
-..fffffffffffff.
-..fffffffeee22f.
-..ffffffeeee22f.
-..feefffeee22ff.
-..fedfdfffe22ee.
-..feefdffee222e.
-..feddddfeee22e.
-...edddddddddde.
-...eeeeeeeeeee..
-...fffeeeeff....
-...eefeeeefee...
-..eddeeeeeedde..
-..edde..ccedde..
-`, img`
-................
-................
-................
-................
-....fffffffff...
-...fffffffffff..
-..fffffffffffff.
-..fffffffeeefff.
-..ffffffeeee2ff.
-..feefffeee22ff.
-..fedfdfffe22ee.
-..feefdffee222e.
-..feddddfee222e.
-...edddddddd22e.
-...eeeeeeeeeee..
-...fffeeeeff....
-...eefeeeefee...
-..eddeeeeeedde..
-..edde..ccedde..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..445dd5555444..
+..4f5dffff54f4..
+..445dd5555444..
+..2eeeeeeeeee2..
+.2445dd55554442.
+2f444444444444f2
 `];
         }
         return null;
