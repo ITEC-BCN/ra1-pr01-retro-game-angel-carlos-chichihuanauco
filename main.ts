@@ -1,6 +1,18 @@
+function mode_attack () {
+    bullet_enemie.follow(mySprite, 50)
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
 })
+function spawn_enemis () {
+    animation.runImageAnimation(
+    bullet_enemie,
+    assets.animation`bullet`,
+    200,
+    true
+    )
+    bullet_enemie.setPosition(320, 270)
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterAnimationsEnabled(mySprite, false)
     if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight))) {
@@ -74,8 +86,27 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
 let dodge_roll = false
+let bullet_enemie: Sprite = null
 let mySprite: Sprite = null
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
+bullet_enemie = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Enemy)
 mySprite.setPosition(300, 270)
 dodge_roll = false
 characterAnimations.loopFrames(
@@ -126,6 +157,10 @@ assets.animation`back_player`,
 300,
 characterAnimations.rule(Predicate.FacingUp)
 )
+spawn_enemis()
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
+game.onUpdateInterval(500, function () {
+    mode_attack()
+})
