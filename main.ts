@@ -16,7 +16,24 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingLeft))) {
         animation.runImageAnimation(
         mySprite,
-        assets.animation`dodge_roll_left`,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
         80,
         false
         )
@@ -76,6 +93,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 let dodge_roll = false
 let mySprite: Sprite = null
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
+mySprite.setPosition(300, 270)
 dodge_roll = false
 characterAnimations.loopFrames(
 mySprite,

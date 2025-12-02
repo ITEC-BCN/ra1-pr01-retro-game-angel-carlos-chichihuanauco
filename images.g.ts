@@ -1505,6 +1505,27 @@ e e f c c c c c c c c c f e e
 . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . 
 `];
+            case "death_player":
+            case "anim13":return [img`
+. . . . . . . . e e 2 2 . . . 
+. . . . . . . . e 2 f f . . . 
+. . . f f f f f e e 2 e e . . 
+. . f f f f f f f e 2 2 e f . 
+. . f f f f d d d d d d d f . 
+. . f f f f d d d d d d d e . 
+. . f e e f d f d d d d f e . 
+. . f e d f d d f f f d d e . 
+. . f e e d d d f f f d d e . 
+. . . e d d d d d d d d d e . 
+. . . . e e e e e e e e e . . 
+. . . . . f f e e e e f . . . 
+. e e e e e f f e e e f e e e 
+e d d e e f f f e e e 5 e d d 
+e d d e . f f f e e e f e d d 
+. e e . . f f f e e e f . e e 
+. . . . . . c c c c c . . . . 
+. . . . . . c . . . c . . . . 
+`];
         }
         return null;
     })
