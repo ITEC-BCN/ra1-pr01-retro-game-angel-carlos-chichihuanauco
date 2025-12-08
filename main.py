@@ -143,13 +143,13 @@ def on_on_overlap2(sprite_player2, otherSprite):
         """)
         intentar_comprar("Pocion", 20, poti_img, sprite_player2)
         intentar_comprar("shotgun",
-            50,
+            250,
             assets.image("""
                 shotgun
                 """),
             sprite_player2)
         intentar_comprar("rifle",
-            120,
+            420,
             assets.image("""
                 rifle
                 """),
@@ -401,8 +401,8 @@ def spawnBoss():
     # Barra de vida del jefe
     sb_boss = statusbars.create(20, 4, StatusBarKind.health)
     sb_boss.attach_to_sprite(boss)
-    sb_boss.max = 20
-    sb_boss.value = 20
+    sb_boss.max = 100
+    sb_boss.value = 100
     sb_boss.set_color(2, 4)
 
 def on_up_released():
@@ -469,7 +469,7 @@ def on_boss_destroyed(boss_sprite):
     explosion.set_position(boss_sprite.x, boss_sprite.y)
     
     # Ejecutamos la animacion de muerte
-    animation.run_image_animation(explosion, anim_kill, 100, False)
+    animation.run_image_animation(explosion, anim_kill, 200, False)
     explosion.lifespan = 1000
     music.big_crash.play()
 sprites.on_destroyed(SpriteKind.Boss, on_boss_destroyed)

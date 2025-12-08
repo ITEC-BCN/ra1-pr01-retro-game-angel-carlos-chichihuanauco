@@ -158,10 +158,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
             . . . . . . . . . . . . . . . .
         `
         intentar_comprar("Pocion", 20, poti_img, sprite_player2)
-        intentar_comprar("shotgun", 50, assets.image`
+        intentar_comprar("shotgun", 250, assets.image`
                 shotgun
                 `, sprite_player2)
-        intentar_comprar("rifle", 120, assets.image`
+        intentar_comprar("rifle", 420, assets.image`
                 rifle
                 `, sprite_player2)
         intentar_comprar("Misterio", 9999, assets.image`
@@ -396,8 +396,8 @@ function spawnBoss() {
     //  Barra de vida del jefe
     let sb_boss = statusbars.create(20, 4, StatusBarKind.Health)
     sb_boss.attachToSprite(boss)
-    sb_boss.max = 20
-    sb_boss.value = 20
+    sb_boss.max = 100
+    sb_boss.value = 100
     sb_boss.setColor(2, 4)
 }
 
@@ -478,7 +478,7 @@ sprites.onDestroyed(SpriteKind.Boss, function on_boss_destroyed(boss_sprite: Spr
     let explosion = sprites.create(anim_kill[0], SpriteKind.ExplosionMortal)
     explosion.setPosition(boss_sprite.x, boss_sprite.y)
     //  Ejecutamos la animacion de muerte
-    animation.runImageAnimation(explosion, anim_kill, 100, false)
+    animation.runImageAnimation(explosion, anim_kill, 200, false)
     explosion.lifespan = 1000
     music.bigCrash.play()
 })
