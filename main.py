@@ -1,10 +1,21 @@
 @namespace
 class SpriteKind:
     npc = SpriteKind.create()
+    info.set_score(0)
+    # Creamos un sprite para el HUD
+    arma_hud = sprites.create(assets.image("""gun"""), SpriteKind.Food)
+    arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
+    arma_hud.set_position(20, 105)
+
+    # Variable para saber qué arma tenemos equipada
+    arma_actual = "pistola"
+    bullet_poryectile = SpriteKind.create()
+    tp_sala = SpriteKind.create()
+    tp_jefe = SpriteKind.create()
 # --- Inicialización del Juego ---
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo in sprites.all_of_kind(SpriteKind.enemy):
+    for un_enemigo in sprites.all_of_kind(SpriteKind.bullet_poryectile):
         un_enemigo.follow(mySprite, 100)
 
 def on_up_pressed():
@@ -172,15 +183,18 @@ controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 # ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 def spawn_enemis_multiple():
-    for pos_tile in POSICIONES_ENEMIGOS:
+    cordenadas_sala1()
+    for pos_tile in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
                 . . . . . . . . . . . . . . . .
                 . . . . . . . . . . . . . . . .
                 . . . . . . . . . . . . . . . .
                 """),
-            SpriteKind.enemy)
-        x_coord = pos_tile[0]  # El primer elemento es la X
-        y_coord = pos_tile[1]  # El segundo elemento es la Y            
+            SpriteKind.bullet_poryectile)
+        x_coord = pos_tile[0]
+        # El primer elemento es la X
+        y_coord = pos_tile[1]
+        # El segundo elemento es la Y
         nuevo_enemigo.set_position(x_coord, y_coord)
         # Configuración de animaciones para ESTE enemigo (repetir para cada uno)
         characterAnimations.loop_frames(nuevo_enemigo,
@@ -196,6 +210,14 @@ def spawn_enemis_multiple():
             200,
             characterAnimations.rule(Predicate.FACING_RIGHT))
 
+def on_on_overlap2(sprite, otherSprite2):
+    mySprite.set_position(2573, 2782)
+sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala, on_on_overlap2)
+
+def on_on_overlap3(sprite2, otherSprite3):
+    mySprite.set_position(2573, 2782)
+sprites.on_overlap(SpriteKind.player, SpriteKind.tp_jefe, on_on_overlap3)
+
 def on_up_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_UP))
 controller.up.on_event(ControllerButtonEvent.RELEASED, on_up_released)
@@ -205,30 +227,48 @@ def on_down_pressed():
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def cordenadas_sala1():
-    global POSICIONES_ENEMIGOS
-    POSICIONES_ENEMIGOS = [[2200, 2516], [1783, 2880], [1976, 2815], [1476, 2525]]
-POSICIONES_ENEMIGOS: List[List[number]] = []
+    global posiciones_sala1
+    posiciones_sala1 = [[randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)]]
+posiciones_sala1: List[List[number]] = []
 dodge_roll = False
-distancia_repulsion = 0
 projectile: Sprite = None
 npc_historia: Sprite = None
 npc_controles: Sprite = None
 mySprite: Sprite = None
+distancia_repulsion = 0
 mySprite = sprites.create(assets.image("""
     myImage
     """), SpriteKind.player)
 npc_controles = sprites.create(assets.image("""
     cultist_npc
     """), SpriteKind.npc)
+tp_lobby_sala = sprites.create(img("""
+        . . . . . 5 . 5 . 5 . . . . . .
+        . . . . . . 5 5 5 . . . . . . .
+        . . . . . 5 5 . 5 5 . . . . . .
+        """),
+    SpriteKind.tp_sala)
+tp_sala_jefe = sprites.create(img("""
+        . . . . . 5 . 5 . 5 . . . . . .
+        . . . . . . 5 5 5 . . . . . . .
+        . . . . . 5 5 . 5 5 . . . . . .
+        """),
+    SpriteKind.tp_jefe)
 npc_historia = sprites.create(assets.image("""
     bullet_npc
     """), SpriteKind.npc)
 npc_tienda = sprites.create(assets.image("""
     dallas_shoper
     """), SpriteKind.npc)
-mySprite.set_position(300, 270)
+mySprite.set_position(335, 316)
 npc_controles.set_position(390, 270)
+tp_lobby_sala.set_position(330, 360)
+tp_sala_jefe.set_position(3135, 311)
 npc_historia.set_position(390, 330)
+npc_tienda.set_position(103, 1464)
 # Establecer velocidad máxima
 # Configuración de animaciones del jugador... (se mantiene igual)
 characterAnimations.loop_frames(npc_controles,
@@ -308,6 +348,64 @@ def on_on_update():
     pass
 game.on_update(on_on_update)
 
-def on_update_interval():
-    pass
-game.on_update_interval(500, on_update_interval)
+# 🗣️ DIÁLOGOS CON "MUESTRARIO VISUAL" DE ARMAS
+def on_npc_overlap(sprite, otherSprite):
+    
+    # ... (Aquí irían los if del Cultista y la Balita igual que antes) ...
+
+    # --- 3. DALLAS (Tienda con Visuales) ---
+    if otherSprite == npc_tienda:
+        # Saludo
+        game.show_long_text(
+            "HEY Guarra! Mira lo que tengo hoy para ti bb...",
+            DialogLayout.BOTTOM
+        )
+
+        # --- MOSTRAR PISTOLA ---
+        # 1. Creamos el sprite temporalmente (Usamos SpriteKind.Food para que no haga daño)
+        arma_visual = sprites.create(assets.image("""gun"""), SpriteKind.Food)
+        # 2. La colocamos encima del jugador (o del NPC)
+        arma_visual.set_position(sprite.x, sprite.y - 30)
+        # 3. Mostramos el texto (el juego se pausa y ves el arma)
+        game.show_long_text(
+            " PISTOLA BÁSICA:\nEs gratis, pero hace el trabajo.",
+            DialogLayout.BOTTOM
+        )
+        # 4. Destruimos el sprite
+        arma_visual.destroy()
+
+        # --- MOSTRAR ESCOPETA ---
+        arma_visual = sprites.create(assets.image("""shotgun"""), SpriteKind.Food)
+        arma_visual.set_position(sprite.x, sprite.y - 30)
+        game.show_long_text(
+            " LA ESCOPETA (50$):\nDispersión amplia. Ideal para fiestas.",
+            DialogLayout.BOTTOM
+        )
+        arma_visual.destroy()
+
+        # --- MOSTRAR RIFLE ---
+        arma_visual = sprites.create(assets.image("""rifle"""), SpriteKind.Food)
+        arma_visual.set_position(sprite.x, sprite.y - 30)
+        game.show_long_text(
+            " RIFLE DE ASALTO (120$):\nRápido, preciso y letal.",
+            DialogLayout.BOTTOM
+        )
+        arma_visual.destroy()
+
+        # --- MOSTRAR EASTER EGG ---
+        arma_visual = sprites.create(assets.image("""easter_egg"""), SpriteKind.Food)
+        arma_visual.set_position(sprite.x, sprite.y - 30)
+        # Efecto especial para el item legendario (vibración de cámara)
+        scene.camera_shake(4, 500)
+        game.show_long_text(
+            " EL HUEVO MISTERIOSO (9999$):\n¿Es un error? ¿Es un dios? ¡Es carísimo!",
+            DialogLayout.BOTTOM
+        )
+        arma_visual.destroy()
+
+        # Despedida
+        game.show_long_text("Vuelve con dinero, socio.", DialogLayout.BOTTOM)
+        sprite.y += 10 # Empujoncito para no buclear
+
+# Conectamos la función al evento
+sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_npc_overlap)
