@@ -1,6 +1,8 @@
 namespace SpriteKind {
     export const npc = SpriteKind.create()
     export const bullet_poryectile = SpriteKind.create()
+    export const tp_sala = SpriteKind.create()
+    export const tp_jefe = SpriteKind.create()
 }
 // --- Inicialización del Juego ---
 function mode_attack () {
@@ -175,6 +177,12 @@ for (let pos_tile of POSICIONES_ENEMIGOS) {
         )
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala, function (sprite, otherSprite) {
+    mySprite.setPosition(2573, 2782)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_jefe, function (sprite, otherSprite) {
+    mySprite.setPosition(2573, 2782)
+})
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingUp))
 })
@@ -198,10 +206,22 @@ let mySprite: Sprite = null
 let distancia_repulsion = 0
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
 npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
+let tp_lobby_sala = sprites.create(img`
+    . . . . . 5 . 5 . 5 . . . . . . 
+    . . . . . . 5 5 5 . . . . . . . 
+    . . . . . 5 5 . 5 5 . . . . . . 
+    `, SpriteKind.tp_sala)
+let tp_sala_jefe = sprites.create(img`
+    . . . . . 5 . 5 . 5 . . . . . . 
+    . . . . . . 5 5 5 . . . . . . . 
+    . . . . . 5 5 . 5 5 . . . . . . 
+    `, SpriteKind.tp_jefe)
 npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
 let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
 mySprite.setPosition(335, 316)
 npc_controles.setPosition(390, 270)
+tp_lobby_sala.setPosition(330, 360)
+tp_sala_jefe.setPosition(0, 0)
 npc_historia.setPosition(390, 330)
 // Establecer velocidad máxima
 // Configuración de animaciones del jugador... (se mantiene igual)
