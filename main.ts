@@ -151,7 +151,7 @@ function spawn_enemis_multiple () {
     let nuevo_enemigo: Sprite;
 let x_coord: number;
 let y_coord: number;
-for (let pos_tile of POSICIONES_ENEMIGOS) {
+for (let pos_tile of posiciones_sala1) {
         nuevo_enemigo = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -190,14 +190,14 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
 function cordenadas_sala1 () {
-    POSICIONES_ENEMIGOS = [
-    [2200, 2516],
-    [1783, 2880],
-    [1976, 2815],
-    [1476, 2525]
+    posiciones_sala1 = [
+    [randint(2201, 1544), randint(2601, 2887)],
+    [randint(2201, 1544), randint(2601, 2887)],
+    [randint(2201, 1544), randint(2601, 2887)],
+    [randint(2201, 1544), randint(2601, 2887)]
     ]
 }
-let POSICIONES_ENEMIGOS: number[][] = []
+let posiciones_sala1: number[][] = []
 let dodge_roll = false
 let projectile: Sprite = null
 let npc_historia: Sprite = null
