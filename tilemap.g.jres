@@ -86,8 +86,7 @@
             "sprites.castle.tileDarkGrass2",
             "sprites.castle.tileDarkGrass3",
             "sprites.dungeon.chestClosed",
-            "sprites.dungeon.collectibleInsignia",
-            "myTiles.tile1"
+            "sprites.dungeon.collectibleInsignia"
         ],
         "displayName": "first_dungeon"
     },
