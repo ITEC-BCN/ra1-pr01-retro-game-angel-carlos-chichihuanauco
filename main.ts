@@ -19,7 +19,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_jefe, function (sprite, otherSprite2) {
-    mySprite.setPosition(2573, 2782)
+    mySprite.setPosition(267, 3000)
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingRight))) {
@@ -269,7 +269,9 @@ let tp_sala_jefe = sprites.create(img`
     `, SpriteKind.tp_sala_jefe)
 npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
 let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
+let jefe = sprites.create(assets.image`boss`, SpriteKind.Enemy)
 mySprite.setPosition(335, 316)
+jefe.setPosition(300, 2220)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
 tp_sala_jefe.setPosition(3135, 311)
