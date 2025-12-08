@@ -1,4 +1,5 @@
 function mode_attack () {
+    bullets_proyectiles.follow(mySprite, 50)
     bullet_enemie.follow(mySprite, 50)
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -16,12 +17,43 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function spawn_enemis () {
+    bullets_proyectiles = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Enemy)
+    characterAnimations.loopFrames(
+    bullets_proyectiles,
+    assets.animation`myAnim`,
+    200,
+    characterAnimations.rule(Predicate.FacingLeft)
+    )
+    characterAnimations.loopFrames(
+    bullets_proyectiles,
+    assets.animation`myAnim0`,
+    200,
+    characterAnimations.rule(Predicate.FacingRight)
+    )
     animation.runImageAnimation(
     bullet_enemie,
     assets.animation`bullet`,
     200,
     true
     )
+    bullets_proyectiles.setPosition(320, 270)
     bullet_enemie.setPosition(320, 270)
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -93,6 +125,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
 let projectile: Sprite = null
+let bullets_proyectiles: Sprite = null
 let dodge_roll = false
 let bullet_enemie: Sprite = null
 let mySprite: Sprite = null
@@ -169,6 +202,9 @@ spawn_enemis()
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
+game.onUpdate(function () {
+	
+})
 game.onUpdateInterval(500, function () {
     mode_attack()
 })
