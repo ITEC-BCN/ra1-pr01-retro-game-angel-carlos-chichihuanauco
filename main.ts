@@ -1,10 +1,11 @@
 namespace SpriteKind {
     export const npc = SpriteKind.create()
+    export const bullet_poryectile = SpriteKind.create()
 }
 // --- Inicialización del Juego ---
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo of sprites.allOfKind(SpriteKind.Enemy)) {
+    for (let un_enemigo of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
         un_enemigo.follow(mySprite, 100)
     }
 }
@@ -144,14 +145,21 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 // ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 function spawn_enemis_multiple () {
+    cordenadas_sala1()
     let nuevo_enemigo: Sprite;
+let x_coord: number;
+let y_coord: number;
 for (let pos_tile of POSICIONES_ENEMIGOS) {
         nuevo_enemigo = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind.Enemy)
-        nuevo_enemigo.setPosition(pos_tile, 270)
+            `, SpriteKind.bullet_poryectile)
+        x_coord = pos_tile[0]
+        // El primer elemento es la X
+        y_coord = pos_tile[1]
+        // El segundo elemento es la Y
+        nuevo_enemigo.setPosition(x_coord, y_coord)
         // Configuración de animaciones para ESTE enemigo (repetir para cada uno)
         characterAnimations.loopFrames(
         nuevo_enemigo,
@@ -173,24 +181,26 @@ controller.up.onEvent(ControllerButtonEvent.Released, function () {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
+function cordenadas_sala1 () {
+    POSICIONES_ENEMIGOS = [
+    [2200, 2516],
+    [1783, 2880],
+    [1976, 2815],
+    [1476, 2525]
+    ]
+}
+let POSICIONES_ENEMIGOS: number[][] = []
 let dodge_roll = false
-let distancia_repulsion = 0
 let projectile: Sprite = null
 let npc_historia: Sprite = null
 let npc_controles: Sprite = null
 let mySprite: Sprite = null
-let POSICIONES_ENEMIGOS: number[] = []
-POSICIONES_ENEMIGOS = [
-300,
-315,
-320,
-340
-]
+let distancia_repulsion = 0
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
 npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
 npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
 let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
-mySprite.setPosition(300, 270)
+mySprite.setPosition(335, 316)
 npc_controles.setPosition(390, 270)
 npc_historia.setPosition(390, 330)
 // Establecer velocidad máxima
@@ -266,8 +276,5 @@ scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
 // ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function () {
-	
-})
-game.onUpdateInterval(500, function () {
 	
 })

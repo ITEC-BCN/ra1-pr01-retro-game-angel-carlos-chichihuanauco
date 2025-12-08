@@ -7,72 +7,6 @@ def mode_attack():
     for un_enemigo in sprites.all_of_kind(SpriteKind.enemy):
         un_enemigo.follow(mySprite, 100)
 
-def on_on_overlap(sprite_player: Sprite, otherSprite: Sprite):
-    # Definimos la distancia de repulsión (ajustable)
-    distancia_repulsion = 10  # Un pequeño empujón es suficiente para romper el solapamiento.
-
-    # Verificamos si la colisión es con cualquiera de los NPCs
-    if otherSprite == npc_controles or otherSprite == npc_historia:
-        
-        # ⭐️ Lógica de Repulsión ⭐️
-        
-        # Calcular la diferencia entre las posiciones
-        delta_x = sprite_player.x - otherSprite.x
-        delta_y = sprite_player.y - otherSprite.y
-        
-        # Repulsión Horizontal (Si la diferencia es significativa)
-        if abs(delta_x) > abs(delta_y):
-            if delta_x > 0:
-                # Jugador a la derecha del NPC, lo empuja más a la derecha
-                sprite_player.x += distancia_repulsion
-            else:
-                # Jugador a la izquierda del NPC, lo empuja más a la izquierda
-                sprite_player.x -= distancia_repulsion
-        # Repulsión Vertical (Si la diferencia es significativa o si la horizontal no lo fue)
-        else:
-            if delta_y > 0:
-                # Jugador debajo del NPC, lo empuja hacia abajo
-                sprite_player.y += distancia_repulsion
-            else:
-                # Jugador encima del NPC, lo empuja hacia arriba
-                sprite_player.y -= distancia_repulsion
-        
-        # ---------------------------
-
-    if otherSprite == npc_controles:
-        game.show_long_text("" + """
-                ¡Alto ahí, recluta!
-                """ + """
-                Este lugar mastica novatos como tú.
-                """ + """
-                Si quieres vivir, aprende esto:
-                """ + """
-                (A): ¡DODGE ROLL! Ruedas y eres intocable por un segundo.
-                """ + "(B): ¡FUEGO! Dispara antes de que te disparen a ti.",
-            DialogLayout.BOTTOM)
-    elif otherSprite == npc_historia:
-        # --- 2. LA BALITA ---
-        # Parte 1: El aviso
-        game.show_long_text("" + """
-                Hola... no pareces de por aquí.
-                """ + """
-                Bienvenido a la 'Cripta del Calibre Perdido'.
-                """ + "Antes esto era una fragua sagrada, pero 'El Detonador' lo corrompió todo...",
-            DialogLayout.BOTTOM)
-        # Parte 2: La leyenda
-        game.show_long_text("" + """
-                Ahora, mis hermanos balas se han vuelto locos por la Pólvora Negra.
-                """ + "Pero dicen que en el fondo existe el el 'Núcleo de Plomo'...",
-            DialogLayout.BOTTOM)
-        # Parte 3: El reto
-        game.show_long_text("" + """
-                Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
-                """ + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ",
-            DialogLayout.BOTTOM)
-
-# Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
-sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap)
-
 def on_up_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
@@ -108,6 +42,64 @@ def on_b_pressed():
             0,
             -200)
 controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
+
+# Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
+
+def on_on_overlap(sprite_player, otherSprite):
+    global distancia_repulsion
+    # Definimos la distancia de repulsión (ajustable)
+    distancia_repulsion = 10
+    # Un pequeño empujón es suficiente para romper el solapamiento.
+    # Verificamos si la colisión es con cualquiera de los NPCs
+    if otherSprite == npc_controles or otherSprite == npc_historia:
+        # ⭐️ Lógica de Repulsión ⭐️
+        # Calcular la diferencia entre las posiciones
+        delta_x = sprite_player.x - otherSprite.x
+        delta_y = sprite_player.y - otherSprite.y
+        # Repulsión Horizontal (Si la diferencia es significativa)
+        if abs(delta_x) > abs(delta_y):
+            if delta_x > 0:
+                # Jugador a la derecha del NPC, lo empuja más a la derecha
+                sprite_player.x += distancia_repulsion
+            else:
+                sprite_player.x -= distancia_repulsion
+        elif delta_y > 0:
+            # Jugador debajo del NPC, lo empuja hacia abajo
+            sprite_player.y += distancia_repulsion
+        else:
+            sprite_player.y -= distancia_repulsion
+    # ---------------------------
+    if otherSprite == npc_controles:
+        game.show_long_text("" + """
+                ¡Alto ahí, recluta!
+                """ + """
+                Este lugar mastica novatos como tú.
+                """ + """
+                Si quieres vivir, aprende esto:
+                """ + """
+                (A): ¡DODGE ROLL! Ruedas y eres intocable por un segundo.
+                """ + "(B): ¡FUEGO! Dispara antes de que te disparen a ti.",
+            DialogLayout.BOTTOM)
+    elif otherSprite == npc_historia:
+        # --- 2. LA BALITA ---
+        # Parte 1: El aviso
+        game.show_long_text("" + """
+                Hola... no pareces de por aquí.
+                """ + """
+                Bienvenido a la 'Cripta del Calibre Perdido'.
+                """ + "Antes esto era una fragua sagrada, pero 'El Detonador' lo corrompió todo...",
+            DialogLayout.BOTTOM)
+        # Parte 2: La leyenda
+        game.show_long_text("" + """
+                Ahora, mis hermanos balas se han vuelto locos por la Pólvora Negra.
+                """ + "Pero dicen que en el fondo existe el el 'Núcleo de Plomo'...",
+            DialogLayout.BOTTOM)
+        # Parte 3: El reto
+        game.show_long_text("" + """
+                Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
+                """ + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ",
+            DialogLayout.BOTTOM)
+sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap)
 
 def on_a_pressed():
     global dodge_roll
@@ -187,7 +179,9 @@ def spawn_enemis_multiple():
                 . . . . . . . . . . . . . . . .
                 """),
             SpriteKind.enemy)
-        nuevo_enemigo.set_position(pos_tile, 270)
+        x_coord = pos_tile[0]  # El primer elemento es la X
+        y_coord = pos_tile[1]  # El segundo elemento es la Y            
+        nuevo_enemigo.set_position(x_coord, y_coord)
         # Configuración de animaciones para ESTE enemigo (repetir para cada uno)
         characterAnimations.loop_frames(nuevo_enemigo,
             assets.animation("""
@@ -210,13 +204,16 @@ def on_down_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_DOWN))
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
+def cordenadas_sala1():
+    global POSICIONES_ENEMIGOS
+    POSICIONES_ENEMIGOS = [[2200, 2516], [1783, 2880], [1976, 2815], [1476, 2525]]
+POSICIONES_ENEMIGOS: List[List[number]] = []
 dodge_roll = False
+distancia_repulsion = 0
 projectile: Sprite = None
 npc_historia: Sprite = None
 npc_controles: Sprite = None
 mySprite: Sprite = None
-POSICIONES_ENEMIGOS: List[number] = []
-POSICIONES_ENEMIGOS = [300, 315, 320, 340]
 mySprite = sprites.create(assets.image("""
     myImage
     """), SpriteKind.player)
