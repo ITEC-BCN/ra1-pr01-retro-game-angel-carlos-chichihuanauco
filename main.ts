@@ -1,8 +1,39 @@
 namespace SpriteKind {
     export const normal_bullet = SpriteKind.create()
+    export const npc = SpriteKind.create()
+    export const tp_sala_lobby = SpriteKind.create()
+    export const tp_sala_jefe = SpriteKind.create()
 }
+// --- Inicialización del Juego ---
+function mode_attack () {
+    // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for (let un_enemigo of sprites.allOfKind(SpriteKind2.bullet_poryectile)) {
+        un_enemigo.follow(mySprite, 10)
+    }
+    // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for (let un_enemigo2 of sprites.allOfKind(SpriteKind.normal_bullet)) {
+        un_enemigo2.follow(mySprite, 30)
+    }
+}
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_jefe, function (sprite, otherSprite2) {
+    mySprite.setPosition(2573, 2782)
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingRight))) {
+        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 200, 0)
+    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingLeft)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingLeft))) {
+        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, -200, 0)
+    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingDown)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingDown))) {
+        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, 200)
+    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingUp)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingUp))) {
+        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, -200)
+    }
+})
 // Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
-sprites.onOverlap(SpriteKind.Player, SpriteKind2.npc, function (sprite_player, otherSprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function (sprite_player, otherSprite) {
     let SpriteKind2: number;
 // Definimos la distancia de repulsión (ajustable)
     distancia_repulsion = 10
@@ -57,31 +88,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind2.npc, function (sprite_player, o
         game.showLongText("" + `
                 Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
                 ` + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ", DialogLayout.Bottom)
-    }
-})
-// --- Inicialización del Juego ---
-function mode_attack () {
-    // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo of sprites.allOfKind(SpriteKind2.bullet_poryectile)) {
-        un_enemigo.follow(mySprite, 10)
-    }
-    // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo2 of sprites.allOfKind(SpriteKind.normal_bullet)) {
-        un_enemigo2.follow(mySprite, 30)
-    }
-}
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
-})
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingRight))) {
-        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 200, 0)
-    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingLeft)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingLeft))) {
-        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, -200, 0)
-    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingDown)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingDown))) {
-        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, 200)
-    } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingUp)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingUp))) {
-        projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, -200)
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -143,9 +149,6 @@ controller.right.onEvent(ControllerButtonEvent.Released, function () {
 })
 controller.left.onEvent(ControllerButtonEvent.Released, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingLeft))
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind2.tp_jefe, function (sprite2, otherSprite3) {
-    mySprite.setPosition(2573, 2782)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingRight))
@@ -214,7 +217,7 @@ controller.up.onEvent(ControllerButtonEvent.Released, function () {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind2.tp_sala, function (sprite, otherSprite2) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_lobby, function (sprite2, otherSprite3) {
     mySprite.setPosition(2573, 2782)
 })
 function cordenadas_sala1 () {
@@ -230,9 +233,9 @@ function cordenadas_sala1 () {
 }
 let posiciones_sala1: number[][] = []
 let dodge_roll = false
-let projectile: Sprite = null
 let delta_y = 0
 let delta_x = 0
+let projectile: Sprite = null
 let npc_historia: Sprite = null
 let npc_controles: Sprite = null
 let mySprite: Sprite = null
@@ -253,20 +256,20 @@ namespace SpriteKind2 {
     export const tp_jefe = SpriteKind.create()
 }
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
-npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind2.npc)
+npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
 let tp_lobby_sala = sprites.create(img`
     . . . . . 5 . 5 . 5 . . . . . . 
     . . . . . . 5 5 5 . . . . . . . 
     . . . . . 5 5 . 5 5 . . . . . . 
-    `, SpriteKind2.tp_sala)
+    `, SpriteKind.tp_sala_lobby)
 let tp_sala_jefe = sprites.create(img`
     . . . . . 5 . 5 . 5 . . . . . . 
     . . . . . . 5 5 5 . . . . . . . 
     . . . . . 5 5 . 5 5 . . . . . . 
-    `, SpriteKind2.tp_jefe)
-npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind2.npc)
-let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind2.npc)
-mySprite.setPosition(2573, 2782)
+    `, SpriteKind.tp_sala_jefe)
+npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
+let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
+mySprite.setPosition(335, 316)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
 tp_sala_jefe.setPosition(3135, 311)

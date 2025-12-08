@@ -4,7 +4,7 @@ class SpriteKind:
 # Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
 
 def on_on_overlap(sprite_player, otherSprite):
-    global distancia_repulsion
+    global distancia_repulsion, delta_x, delta_y
     # Definimos la distancia de repulsión (ajustable)
     distancia_repulsion = 10
     # Un pequeño empujón es suficiente para romper el solapamiento.
@@ -59,12 +59,12 @@ def on_on_overlap(sprite_player, otherSprite):
                 Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
                 """ + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ",
             DialogLayout.BOTTOM)
-sprites.on_overlap(SpriteKind.player, SpriteKind2.npc, on_on_overlap)
+sprites.on_overlap(SpriteKind.player, SpriteKind22.npc, on_on_overlap)
 
 # --- Inicialización del Juego ---
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo in sprites.all_of_kind(SpriteKind2.bullet_poryectile):
+    for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
         un_enemigo.follow(mySprite, 10)
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo2 in sprites.all_of_kind(SpriteKind.normal_bullet):
@@ -171,13 +171,13 @@ def on_left_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_LEFT))
 controller.left.on_event(ControllerButtonEvent.RELEASED, on_left_released)
 
-def on_on_overlap2(sprite2, otherSprite3):
-    mySprite.set_position(2573, 2782)
-sprites.on_overlap(SpriteKind.player, SpriteKind2.tp_jefe, on_on_overlap2)
-
 def on_right_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT))
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
+
+def on_on_overlap2(sprite2, otherSprite3):
+    mySprite.set_position(2573, 2782)
+sprites.on_overlap(SpriteKind.player, SpriteKind22.tp_jefe, on_on_overlap2)
 
 # ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 def spawn_enemis_multiple():
@@ -188,7 +188,7 @@ def spawn_enemis_multiple():
                 . . . . . . . . . . . . . . . .
                 . . . . . . . . . . . . . . . .
                 """),
-            SpriteKind2.bullet_poryectile)
+            SpriteKind22.bullet_poryectile)
         x_coord = pos_tile[0]
         # El primer elemento es la X
         y_coord = pos_tile[1]
@@ -244,7 +244,7 @@ controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def on_on_overlap3(sprite, otherSprite2):
     mySprite.set_position(2573, 2782)
-sprites.on_overlap(SpriteKind.player, SpriteKind2.tp_sala, on_on_overlap3)
+sprites.on_overlap(SpriteKind.player, SpriteKind22.tp_sala, on_on_overlap3)
 
 def cordenadas_sala1():
     global posiciones_sala1
@@ -258,20 +258,22 @@ def cordenadas_sala1():
 posiciones_sala1: List[List[number]] = []
 dodge_roll = False
 projectile: Sprite = None
+delta_y = 0
+delta_x = 0
 npc_historia: Sprite = None
 npc_controles: Sprite = None
 mySprite: Sprite = None
 distancia_repulsion = 0
 @namespace
-class SpriteKind2:
+class SpriteKind22:
     npc = SpriteKind.create()
     info.set_score(0)
     # Creamos un sprite para el HUD
     arma_hud = sprites.create(assets.image("""
         gun
         """), SpriteKind.food)
-    SpriteKind2.arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
-    SpriteKind2.arma_hud.set_position(20, 105)
+    SpriteKind22.arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
+    SpriteKind22.arma_hud.set_position(20, 105)
     # Variable para saber qué arma tenemos equipada
     arma_actual = "pistola"
     bullet_poryectile = SpriteKind.create()
@@ -282,26 +284,27 @@ mySprite = sprites.create(assets.image("""
     """), SpriteKind.player)
 npc_controles = sprites.create(assets.image("""
     cultist_npc
-    """), SpriteKind2.npc)
+    """), SpriteKind22.npc)
 tp_lobby_sala = sprites.create(img("""
         . . . . . 5 . 5 . 5 . . . . . .
         . . . . . . 5 5 5 . . . . . . .
         . . . . . 5 5 . 5 5 . . . . . .
         """),
-    SpriteKind2.tp_sala)
+    SpriteKind22.tp_sala)
 tp_sala_jefe = sprites.create(img("""
         . . . . . 5 . 5 . 5 . . . . . .
         . . . . . . 5 5 5 . . . . . . .
         . . . . . 5 5 . 5 5 . . . . . .
         """),
-    SpriteKind2.tp_jefe)
+    SpriteKind22.tp_jefe)
 npc_historia = sprites.create(assets.image("""
     bullet_npc
-    """), SpriteKind2.npc)
+    """), SpriteKind22.npc)
 npc_tienda = sprites.create(assets.image("""
-    dallas_shoper
-    """), SpriteKind2.npc)
-mySprite.set_position(2573, 2782)
+        dallas_shoper
+        """),
+    SpriteKind22.npc)
+mySprite.set_position(335, 316)
 npc_controles.set_position(390, 270)
 tp_lobby_sala.set_position(330, 360)
 tp_sala_jefe.set_position(3135, 311)
