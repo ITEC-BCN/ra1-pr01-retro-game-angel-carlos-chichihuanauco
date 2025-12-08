@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const npc = SpriteKind.create()
+}
 /**
  * --- Inicialización del Juego ---
  */
@@ -126,7 +129,28 @@ POSICIONES_ENEMIGOS = [
 340
 ]
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
+let npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
+let npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
+let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
 mySprite.setPosition(300, 270)
+npc_controles.setPosition(390, 270)
+npc_historia.setPosition(390, 330)
+// Establecer velocidad máxima
+// Configuración de animaciones del jugador... (se mantiene igual)
+characterAnimations.loopFrames(
+npc_controles,
+assets.animation`cultistAnimation`,
+300,
+characterAnimations.rule(Predicate.NotMoving)
+)
+// Establecer velocidad máxima
+// Configuración de animaciones del jugador... (se mantiene igual)
+characterAnimations.loopFrames(
+npc_historia,
+assets.animation`Bullet_NPC_Animation`,
+400,
+characterAnimations.rule(Predicate.NotMoving)
+)
 // Establecer velocidad máxima
 // Configuración de animaciones del jugador... (se mantiene igual)
 characterAnimations.loopFrames(
