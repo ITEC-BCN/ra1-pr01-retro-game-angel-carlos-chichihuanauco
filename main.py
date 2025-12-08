@@ -1,9 +1,61 @@
 @namespace
 class SpriteKind:
     normal_bullet = SpriteKind.create()
+    npc = SpriteKind.create()
+    tp_sala_lobby = SpriteKind.create()
+    tp_sala_jefe = SpriteKind.create()
+# --- Inicialización del Juego ---
+def mode_attack():
+    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
+        un_enemigo.follow(mySprite, 10)
+    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for un_enemigo2 in sprites.all_of_kind(SpriteKind.normal_bullet):
+        un_enemigo2.follow(mySprite, 30)
+
+def on_up_pressed():
+    characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
+controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
+
+def on_on_overlap(sprite, otherSprite2):
+    mySprite.set_position(2573, 2782)
+sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_jefe, on_on_overlap)
+
+def on_b_pressed():
+    global projectile
+    if characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_RIGHT)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT)):
+        projectile = sprites.create_projectile_from_sprite(assets.image("""
+                bullet_initial
+                """),
+            mySprite,
+            200,
+            0)
+    elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_LEFT)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_LEFT)):
+        projectile = sprites.create_projectile_from_sprite(assets.image("""
+                bullet_initial
+                """),
+            mySprite,
+            -200,
+            0)
+    elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_DOWN)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_DOWN)):
+        projectile = sprites.create_projectile_from_sprite(assets.image("""
+                bullet_initial
+                """),
+            mySprite,
+            0,
+            200)
+    elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_UP)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_UP)):
+        projectile = sprites.create_projectile_from_sprite(assets.image("""
+                bullet_initial
+                """),
+            mySprite,
+            0,
+            -200)
+controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
+
 # Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
 
-def on_on_overlap(sprite_player, otherSprite):
+def on_on_overlap2(sprite_player, otherSprite):
     global distancia_repulsion, delta_x, delta_y
     # Definimos la distancia de repulsión (ajustable)
     distancia_repulsion = 10
@@ -59,52 +111,7 @@ def on_on_overlap(sprite_player, otherSprite):
                 Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
                 """ + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ",
             DialogLayout.BOTTOM)
-sprites.on_overlap(SpriteKind.player, SpriteKind22.npc, on_on_overlap)
-
-# --- Inicialización del Juego ---
-def mode_attack():
-    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
-        un_enemigo.follow(mySprite, 10)
-    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo2 in sprites.all_of_kind(SpriteKind.normal_bullet):
-        un_enemigo2.follow(mySprite, 30)
-
-def on_up_pressed():
-    characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
-controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
-
-def on_b_pressed():
-    global projectile
-    if characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_RIGHT)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            200,
-            0)
-    elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_LEFT)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_LEFT)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            -200,
-            0)
-    elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_DOWN)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_DOWN)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            0,
-            200)
-    elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_UP)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_UP)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            0,
-            -200)
-controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
+sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap2)
 
 def on_a_pressed():
     global dodge_roll
@@ -175,12 +182,26 @@ def on_right_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT))
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
-def on_on_overlap2(sprite2, otherSprite3):
-    mySprite.set_position(2573, 2782)
-sprites.on_overlap(SpriteKind.player, SpriteKind22.tp_jefe, on_on_overlap2)
+def on_on_overlap3(sprite_proj, otherSprite4):
+    global enemigo_status
+    # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
+    enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite4)
+    if enemigo_status:
+        # 2. Reducir la vida de la barra de estado específica
+        enemigo_status.value += -5
+        # Reduce la vida en 1 (o el daño deseado)
+        # 3. Destruir el proyectil
+        sprite_proj.destroy()
+        # 4. Comprobar si el enemigo muere
+        if enemigo_status.value <= 0:
+            otherSprite4.destroy(effects.disintegrate)
+sprites.on_overlap(SpriteKind.projectile,
+    SpriteKind.normal_bullet,
+    on_on_overlap3)
 
 # ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 def spawn_enemis_multiple():
+    global statusbar
     cordenadas_sala1()
     for pos_tile in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
@@ -207,6 +228,12 @@ def spawn_enemis_multiple():
                 """),
             200,
             characterAnimations.rule(Predicate.FACING_RIGHT))
+        sb = statusbars.create(20, 4, StatusBarKind.health)
+        sb.attach_to_sprite(nuevo_enemigo)
+        sb.max = 3
+        # Ejemplo de vida inicial
+        sb.value = 3
+        sb.set_color(7, 2)
     cordenadas_sala1()
     for pos_tile2 in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
@@ -233,6 +260,9 @@ def spawn_enemis_multiple():
                 """),
             200,
             characterAnimations.rule(Predicate.FACING_RIGHT))
+        statusbar = statusbars.create(20, 4, StatusBarKind.health)
+        statusbar.attach_to_sprite(nuevo_enemigo)
+        statusbar.set_color(7, 2)
 
 def on_up_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_UP))
@@ -242,9 +272,9 @@ def on_down_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_DOWN))
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
-def on_on_overlap3(sprite, otherSprite2):
+def on_on_overlap4(sprite2, otherSprite3):
     mySprite.set_position(2573, 2782)
-sprites.on_overlap(SpriteKind.player, SpriteKind22.tp_sala, on_on_overlap3)
+sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_lobby, on_on_overlap4)
 
 def cordenadas_sala1():
     global posiciones_sala1
@@ -255,18 +285,20 @@ def cordenadas_sala1():
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)]]
+statusbar: StatusBarSprite = None
 posiciones_sala1: List[List[number]] = []
+enemigo_status: StatusBarSprite = None
 dodge_roll = False
-projectile: Sprite = None
 delta_y = 0
 delta_x = 0
+projectile: Sprite = None
 npc_historia: Sprite = None
 npc_controles: Sprite = None
 mySprite: Sprite = None
 distancia_repulsion = 0
 @namespace
 class SpriteKind22:
-    npc = SpriteKind.create()
+    npc2 = SpriteKind.create()
     info.set_score(0)
     # Creamos un sprite para el HUD
     arma_hud = sprites.create(assets.image("""
@@ -284,30 +316,29 @@ mySprite = sprites.create(assets.image("""
     """), SpriteKind.player)
 npc_controles = sprites.create(assets.image("""
     cultist_npc
-    """), SpriteKind22.npc)
+    """), SpriteKind.npc)
 tp_lobby_sala = sprites.create(img("""
         . . . . . 5 . 5 . 5 . . . . . .
         . . . . . . 5 5 5 . . . . . . .
         . . . . . 5 5 . 5 5 . . . . . .
         """),
-    SpriteKind22.tp_sala)
-tp_sala_jefe = sprites.create(img("""
+    SpriteKind.tp_sala_lobby)
+tp_sala_jefe2 = sprites.create(img("""
         . . . . . 5 . 5 . 5 . . . . . .
         . . . . . . 5 5 5 . . . . . . .
         . . . . . 5 5 . 5 5 . . . . . .
         """),
-    SpriteKind22.tp_jefe)
+    SpriteKind.tp_sala_jefe)
 npc_historia = sprites.create(assets.image("""
     bullet_npc
-    """), SpriteKind22.npc)
+    """), SpriteKind.npc)
 npc_tienda = sprites.create(assets.image("""
-        dallas_shoper
-        """),
-    SpriteKind22.npc)
+    dallas_shoper
+    """), SpriteKind.npc)
 mySprite.set_position(335, 316)
 npc_controles.set_position(390, 270)
 tp_lobby_sala.set_position(330, 360)
-tp_sala_jefe.set_position(3135, 311)
+tp_sala_jefe2.set_position(3135, 311)
 npc_historia.set_position(390, 330)
 npc_tienda.set_position(103, 1464)
 # Establecer velocidad máxima
@@ -386,5 +417,5 @@ tiles.set_current_tilemap(tilemap("""
 # ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 
 def on_on_update():
-    mode_attack()
+    pass
 game.on_update(on_on_update)

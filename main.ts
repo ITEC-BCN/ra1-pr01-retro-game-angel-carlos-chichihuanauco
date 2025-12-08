@@ -7,7 +7,7 @@ namespace SpriteKind {
 // --- Inicialización del Juego ---
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo of sprites.allOfKind(SpriteKind2.bullet_poryectile)) {
+    for (let un_enemigo of sprites.allOfKind(SpriteKind22.bullet_poryectile)) {
         un_enemigo.follow(mySprite, 10)
     }
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
@@ -153,18 +153,34 @@ controller.left.onEvent(ControllerButtonEvent.Released, function () {
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingRight))
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function (sprite_proj, otherSprite4) {
+    // 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
+    enemigo_status = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, otherSprite4)
+    if (enemigo_status) {
+        // 2. Reducir la vida de la barra de estado específica
+        enemigo_status.value += -5
+        // Reduce la vida en 1 (o el daño deseado)
+        // 3. Destruir el proyectil
+        sprite_proj.destroy()
+        // 4. Comprobar si el enemigo muere
+        if (enemigo_status.value <= 0) {
+            otherSprite4.destroy(effects.disintegrate)
+        }
+    }
+})
 // ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 function spawn_enemis_multiple () {
     let nuevo_enemigo: Sprite;
 let x_coord: number;
 let y_coord: number;
+let sb: StatusBarSprite;
 cordenadas_sala1()
     for (let pos_tile of posiciones_sala1) {
         nuevo_enemigo = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind2.bullet_poryectile)
+            `, SpriteKind22.bullet_poryectile)
         x_coord = pos_tile[0]
         // El primer elemento es la X
         y_coord = pos_tile[1]
@@ -183,6 +199,12 @@ cordenadas_sala1()
         200,
         characterAnimations.rule(Predicate.FacingRight)
         )
+        sb = statusbars.create(20, 4, StatusBarKind.Health)
+        sb.attachToSprite(nuevo_enemigo)
+        sb.max = 3
+        // Ejemplo de vida inicial
+        sb.value = 3
+        sb.setColor(7, 2)
     }
     cordenadas_sala1()
     for (let pos_tile2 of posiciones_sala1) {
@@ -209,6 +231,9 @@ cordenadas_sala1()
         200,
         characterAnimations.rule(Predicate.FacingRight)
         )
+        statusbar = statusbars.create(20, 4, StatusBarKind.Health)
+        statusbar.attachToSprite(nuevo_enemigo)
+        statusbar.setColor(7, 2)
     }
 }
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
@@ -231,7 +256,9 @@ function cordenadas_sala1 () {
     [randint(2201, 1544), randint(2601, 2887)]
     ]
 }
+let statusbar: StatusBarSprite = null
 let posiciones_sala1: number[][] = []
+let enemigo_status: StatusBarSprite = null
 let dodge_roll = false
 let delta_y = 0
 let delta_x = 0
@@ -240,15 +267,15 @@ let npc_historia: Sprite = null
 let npc_controles: Sprite = null
 let mySprite: Sprite = null
 let distancia_repulsion = 0
-namespace SpriteKind2 {
-    export const npc = SpriteKind.create()
+namespace SpriteKind22 {
+    export const npc2 = SpriteKind.create()
     info.setScore(0)
     //  Creamos un sprite para el HUD
     export const arma_hud = sprites.create(assets.image`
         gun
         `, SpriteKind.Food)
-    SpriteKind2.arma_hud.setFlag(SpriteFlag.RelativeToCamera, true)
-    SpriteKind2.arma_hud.setPosition(20, 105)
+    SpriteKind22.arma_hud.setFlag(SpriteFlag.RelativeToCamera, true)
+    SpriteKind22.arma_hud.setPosition(20, 105)
     //  Variable para saber qué arma tenemos equipada
     export const arma_actual = "pistola"
     export const bullet_poryectile = SpriteKind.create()
@@ -262,7 +289,7 @@ let tp_lobby_sala = sprites.create(img`
     . . . . . . 5 5 5 . . . . . . . 
     . . . . . 5 5 . 5 5 . . . . . . 
     `, SpriteKind.tp_sala_lobby)
-let tp_sala_jefe = sprites.create(img`
+let tp_sala_jefe2 = sprites.create(img`
     . . . . . 5 . 5 . 5 . . . . . . 
     . . . . . . 5 5 5 . . . . . . . 
     . . . . . 5 5 . 5 5 . . . . . . 
@@ -274,7 +301,7 @@ mySprite.setPosition(335, 316)
 jefe.setPosition(300, 2220)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
-tp_sala_jefe.setPosition(3135, 311)
+tp_sala_jefe2.setPosition(3135, 311)
 npc_historia.setPosition(390, 330)
 npc_tienda.setPosition(103, 1464)
 // Establecer velocidad máxima
@@ -350,5 +377,5 @@ scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
 // ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function () {
-    mode_attack()
+	
 })
