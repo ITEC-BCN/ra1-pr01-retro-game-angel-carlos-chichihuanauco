@@ -1,9 +1,7 @@
 namespace SpriteKind {
     export const npc = SpriteKind.create()
 }
-/**
- * --- Inicialización del Juego ---
- */
+// --- Inicialización del Juego ---
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for (let un_enemigo of sprites.allOfKind(SpriteKind.Enemy)) {
@@ -22,6 +20,63 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, 200)
     } else if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingUp)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingUp))) {
         projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, -200)
+    }
+})
+// Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
+sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function (sprite_player, otherSprite) {
+    let delta_x: number;
+let delta_y: number;
+// Definimos la distancia de repulsión (ajustable)
+    distancia_repulsion = 10
+    // Un pequeño empujón es suficiente para romper el solapamiento.
+    // Verificamos si la colisión es con cualquiera de los NPCs
+    if (otherSprite == npc_controles || otherSprite == npc_historia) {
+        // ⭐️ Lógica de Repulsión ⭐️
+        // Calcular la diferencia entre las posiciones
+        delta_x = sprite_player.x - otherSprite.x
+        delta_y = sprite_player.y - otherSprite.y
+        // Repulsión Horizontal (Si la diferencia es significativa)
+        if (Math.abs(delta_x) > Math.abs(delta_y)) {
+            if (delta_x > 0) {
+                // Jugador a la derecha del NPC, lo empuja más a la derecha
+                sprite_player.x += distancia_repulsion
+            } else {
+                sprite_player.x -= distancia_repulsion
+            }
+        } else if (delta_y > 0) {
+            // Jugador debajo del NPC, lo empuja hacia abajo
+            sprite_player.y += distancia_repulsion
+        } else {
+            sprite_player.y -= distancia_repulsion
+        }
+    }
+    // ---------------------------
+    if (otherSprite == npc_controles) {
+        game.showLongText("" + `
+                ¡Alto ahí, recluta!
+                ` + `
+                Este lugar mastica novatos como tú.
+                ` + `
+                Si quieres vivir, aprende esto:
+                ` + `
+                (A): ¡DODGE ROLL! Ruedas y eres intocable por un segundo.
+                ` + "(B): ¡FUEGO! Dispara antes de que te disparen a ti.", DialogLayout.Bottom)
+    } else if (otherSprite == npc_historia) {
+        // --- 2. LA BALITA ---
+        // Parte 1: El aviso
+        game.showLongText("" + `
+                Hola... no pareces de por aquí.
+                ` + `
+                Bienvenido a la 'Cripta del Calibre Perdido'.
+                ` + "Antes esto era una fragua sagrada, pero 'El Detonador' lo corrompió todo...", DialogLayout.Bottom)
+        // Parte 2: La leyenda
+        game.showLongText("" + `
+                Ahora, mis hermanos balas se han vuelto locos por la Pólvora Negra.
+                ` + "Pero dicen que en el fondo existe el el 'Núcleo de Plomo'...", DialogLayout.Bottom)
+        // Parte 3: El reto
+        game.showLongText("" + `
+                Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
+                ` + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ", DialogLayout.Bottom)
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -119,7 +174,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
 let dodge_roll = false
+let distancia_repulsion = 0
 let projectile: Sprite = null
+let npc_historia: Sprite = null
+let npc_controles: Sprite = null
 let mySprite: Sprite = null
 let POSICIONES_ENEMIGOS: number[] = []
 POSICIONES_ENEMIGOS = [
@@ -129,8 +187,8 @@ POSICIONES_ENEMIGOS = [
 340
 ]
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
-let npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
-let npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
+npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
+npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
 let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
 mySprite.setPosition(300, 270)
 npc_controles.setPosition(390, 270)
