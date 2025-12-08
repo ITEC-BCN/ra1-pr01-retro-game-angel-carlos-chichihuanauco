@@ -5,7 +5,7 @@ namespace SpriteKind {
     export const tp_sala_jefe = SpriteKind.create()
     export const ENEMIE_PROJECTILE = SpriteKind.create()
     export const bullet_poryectile = SpriteKind.create()
-    //  ✨ NUEVOS TIPOS PARA EL JEFE
+    //  Definimos los tipos para el jefe y su explosion
     export const Boss = SpriteKind.create()
     export const ExplosionMortal = SpriteKind.create()
 }
@@ -21,15 +21,15 @@ function cordenadas_sala8() {
 }
 
 function mode_attack() {
-    //   OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    //  Hacemos que los enemigos tipo bullet sigan al jugador
     for (let un_enemigo2 of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
         un_enemigo2.follow(mySprite, 10)
     }
-    //   OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    //  Hacemos que los enemigos normales sigan al jugador
     for (let un_enemigo22 of sprites.allOfKind(SpriteKind.normal_bullet)) {
         un_enemigo22.follow(mySprite, 30)
     }
-    //  ✨ EL JEFE TE PERSIGUE (Un poco más rápido que los normales)
+    //  El jefe persigue al jugador un poco mas rapido
     for (let boss of sprites.allOfKind(SpriteKind.Boss)) {
         boss.follow(mySprite, 40)
     }
@@ -38,7 +38,7 @@ function mode_attack() {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_on_overlap(sprite_player: Sprite, sprite_proj: Sprite) {
     //  Destruir el proyectil enemigo inmediatamente
     sprite_proj.destroy()
-    //   COMPROBACIÓN DE INVULNERABILIDAD
+    //  Chequeamos si el jugador esta rodando para evitar daño
     if (dodge_roll == true) {
         
     } else {
@@ -49,7 +49,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_o
     }
     
 })
-//  CONFIGURACIÓN DE ARMAS
+//  Configuracion de las armas
 let stats_armas = {
     "pistola" : {
         "damage" : 1,
@@ -78,27 +78,25 @@ let stats_armas = {
 }
 
 //  Lenta pero fuerte
-//  ¡Metralleta rápida!
-//  Lenta, dispara poco, pero DEVASTADORA
-//  Variable para controlar el tiempo (para la cadencia)
+//  Metralleta rapida
+//  Lenta pero devastadora
+//  Control del tiempo para la cadencia de disparo
 let tiempo_ultimo_disparo = 0
 controller.up.onEvent(ControllerButtonEvent.Pressed, function on_up_pressed() {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
 })
-//  Empujoncito final
+//  Logica de empuje al chocar con NPCs
 sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(sprite_player2: Sprite, otherSprite: Sprite) {
     let poti_img: Image;
     
-    //  Definimos la distancia de repulsión (ajustable)
+    //  Distancia de empuje
     distancia_repulsion2 = 10
-    //  Un pequeño empujón es suficiente para romper el solapamiento.
-    //  Verificamos si la colisión es con cualquiera de los NPCs
+    //  Calculamos la diferencia entre posiciones para saber hacia donde empujar
     delta_x = sprite_player2.x - otherSprite.x
     delta_y = sprite_player2.y - otherSprite.y
     if (otherSprite == npc_controles || otherSprite == npc_historia) {
-        //   Lógica de Repulsión
+        //  Calculamos direccion de repulsion
         delta_x = sprite_player2.x - otherSprite.x
-        //  Repulsión Horizontal (Si la diferencia es significativa)
         if (Math.abs(delta_x) > Math.abs(delta_y)) {
             if (delta_x > 0) {
                 sprite_player2.x += distancia_repulsion2
@@ -114,7 +112,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
         
     }
     
-    //  ---------------------------
+    //  Dialogos de los NPCs
     if (otherSprite == npc_controles) {
         game.showLongText("" + `
                 ¡Alto ahí, recluta!
@@ -126,6 +124,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
                 (A): ¡DODGE ROLL! Ruedas y eres intocable por un segundo.
                 ` + "(B): ¡FUEGO! Dispara antes de que te disparen a ti.", DialogLayout.Bottom)
     } else if (otherSprite == npc_historia) {
+        //  Historia del juego
         game.showLongText("" + `
                 Hola... no pareces de por aquí.
                 ` + `
@@ -139,7 +138,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
                 ` + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ", DialogLayout.Bottom)
     } else if (otherSprite == npc_tienda) {
         game.showLongText("¡Bienvenido! ¿Qué te llevas hoy?", DialogLayout.Bottom)
-        //  ✨ VENTA DE POCIONES (Dibujada a mano para evitar errores de null)
+        //  Venta de pociones (usamos imagen generada por codigo)
         poti_img = img`
             . . . . . . . . . . . . . . . .
             . . . . . . . 2 2 . . . . . . .
@@ -223,20 +222,20 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.bullet_poryectile, function on_on_overlap4(sprite_proj22: Sprite, otherSprite42: Sprite) {
     let daño_recibido: number;
     
-    //  1. Obtener la barra de vida del enemigo
+    //  Obtenemos la barra de vida del enemigo golpeado
     enemigo_status = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, otherSprite42)
     if (enemigo_status) {
-        //  ⭐️ NUEVO: LEER EL DAÑO DE LA BALA ⭐️
+        //  Obtenemos el daño configurado en el proyectil
         daño_recibido = sprites.readDataNumber(sprite_proj22, "damage")
         if (daño_recibido == 0) {
             daño_recibido = 1
         }
         
-        //  2. Restar ese daño específico
+        //  Aplicamos el daño
         enemigo_status.value -= daño_recibido
-        //  3. Destruir bala
+        //  Destruimos el proyectil
         sprite_proj22.destroy()
-        //  4. Muerte
+        //  Si la vida llega a 0, eliminamos al enemigo
         if (enemigo_status.value <= 0) {
             info.changeScoreBy(100)
             otherSprite42.destroy(effects.disintegrate)
@@ -245,7 +244,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.bullet_poryectile, function 
     }
     
 })
-//  Funciones de released
+//  Funciones al soltar botones
 controller.down.onEvent(ControllerButtonEvent.Released, function on_down_released() {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
 })
@@ -257,22 +256,22 @@ function cordenadas_sala2() {
 controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed() {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingLeft))
 })
-//  ✨ MODIFICADO: Lógica de compra para pociones
+//  Modificamos la funcion de compra para incluir las pociones
 function intentar_comprar(nombre_arma: string, precio: number, imagen_arma: Image, sprite_jugador: Sprite) {
     
-    //  1. Crear Fondo Blanco
+    //  Crear fondo blanco para resaltar el item
     fondo_blanco = sprites.create(image.create(30, 30), SpriteKind.Food)
     fondo_blanco.image.fill(1)
     fondo_blanco.setPosition(sprite_jugador.x, sprite_jugador.y - 40)
-    //  2. Crear el Arma Visual
+    //  Crear el sprite visual del item
     arma_visual = sprites.create(imagen_arma, SpriteKind.Food)
     arma_visual.setPosition(sprite_jugador.x, sprite_jugador.y - 40)
-    //  3. Preguntar
+    //  Preguntar al usuario
     compra = game.ask("" + nombre_arma + " ($" + ("" + ("" + precio)) + ")", "¿Comprar?")
-    //  4. Lógica de compra
+    //  Procesar compra
     if (compra) {
         if (info.score() >= precio) {
-            //  LÓGICA POCIÓN
+            //  Logica para comprar pocion
             if (nombre_arma == "Pocion") {
                 if (info.life() < 15) {
                     info.changeScoreBy(0 - precio)
@@ -280,14 +279,14 @@ function intentar_comprar(nombre_arma: string, precio: number, imagen_arma: Imag
                     music.powerUp.play()
                     game.splash("¡Salud +1 Corazón! <3")
                 } else {
-                    game.splash("¡Ya estás lleno de vida! UwO")
+                    game.splash("¡Ya estás lleno de vida!")
                 }
                 
             } else {
-                //  LÓGICA ARMAS
+                //  Logica para comprar armas
                 info.changeScoreBy(0 - precio)
                 arma_actual = nombre_arma
-                //  Limpieza HUD
+                //  Actualizamos el HUD del arma
                 arma_hud.destroy()
                 arma_hud = sprites.create(imagen_arma, SpriteKind.Food)
                 arma_hud.setFlag(SpriteFlag.RelativeToCamera, true)
@@ -303,7 +302,7 @@ function intentar_comprar(nombre_arma: string, precio: number, imagen_arma: Imag
         
     }
     
-    //  5. Limpiar
+    //  Limpiamos los sprites temporales
     arma_visual.destroy()
     fondo_blanco.destroy()
 }
@@ -340,7 +339,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.normal_bullet, function on_on_ov
 controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_pressed() {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingRight))
 })
-//  ⭐️ NUEVA FUNCIÓN: Genera enemigos
+//  Funcion para generar multiples enemigos
 function spawn_enemis_multiple() {
     let nuevo_enemigo: Sprite;
     let x_coord: number;
@@ -384,17 +383,17 @@ function spawn_enemis_multiple() {
     }
 }
 
-//  ✨ NUEVA FUNCIÓN: Invoca al Mini Jefe
+//  Funcion para spawnear al jefe
 function spawnBoss() {
-    //  Usamos el primer frame de la animación derecha para crear el sprite inicial
+    //  Usamos el primer frame de la animacion para crear el sprite
     let boss_anim_start = assets.animation`bullet_key_right`[0]
     let boss = sprites.create(boss_anim_start, SpriteKind.Boss)
-    //  Posición aleatoria según tus coordenadas
+    //  Posicion aleatoria en la sala
     boss.setPosition(3123, 1200)
-    //  Animaciones de movimiento
+    //  Configuramos animaciones de movimiento
     characterAnimations.loopFrames(boss, assets.animation`bullet_key_left`, 200, characterAnimations.rule(Predicate.FacingLeft))
     characterAnimations.loopFrames(boss, assets.animation`bullet_key_right`, 200, characterAnimations.rule(Predicate.FacingRight))
-    //  Barra de vida
+    //  Barra de vida del jefe
     let sb_boss = statusbars.create(20, 4, StatusBarKind.Health)
     sb_boss.attachToSprite(boss)
     sb_boss.max = 20
@@ -433,7 +432,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function on_o
     }
     
 })
-//  ✨ DAÑO AL JEFE
+//  Daño al jefe por proyectiles
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Boss, function on_hit_boss(sprite_proj: Sprite, boss_sprite: Sprite) {
     let daño: number;
     let status_jefe = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss_sprite)
@@ -453,14 +452,14 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Boss, function on_hit_boss(s
     }
     
 })
-//  ✨ JEFE ATACA AL JUGADOR (Cuerpo a cuerpo)
+//  El jefe daña al jugador al tocarlo
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function on_boss_hit_player(player_sprite: Sprite, boss_sprite: Sprite) {
     if (dodge_roll) {
         return
     }
     
     info.changeLifeBy(-2)
-    //  El jefe quita más vida
+    //  El jefe hace mas daño
     scene.cameraShake(4, 500)
     music.thump.play()
     //  Rebote simple
@@ -472,21 +471,20 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function on_boss_hit_playe
     
     pause(500)
 })
-//  ✨ MUERTE DEL JEFE (EXPLOSIÓN)
+//  Evento al destruir al jefe (explosion)
 sprites.onDestroyed(SpriteKind.Boss, function on_boss_destroyed(boss_sprite: Sprite) {
-    //  Crear explosión usando el primer frame de la animación kill
+    //  Usamos el primer cuadro de la animacion de muerte para crear la explosion
     let anim_kill = assets.animation`bullet_key_kill`
     let explosion = sprites.create(anim_kill[0], SpriteKind.ExplosionMortal)
     explosion.setPosition(boss_sprite.x, boss_sprite.y)
-    //  Ejecutar animación de muerte
+    //  Ejecutamos la animacion de muerte
     animation.runImageAnimation(explosion, anim_kill, 100, false)
     explosion.lifespan = 1000
-    //  Tiempo para que la animación termine
     music.bigCrash.play()
 })
-//  ✨ EXPLOSIÓN DAÑA AL JUGADOR
+//  La explosion daña al jugador si lo toca
 sprites.onOverlap(SpriteKind.Player, SpriteKind.ExplosionMortal, function on_explosion_hit_player(player_sprite: Sprite, explosion_sprite: Sprite) {
-    //  Te deja a 1 de vida si te toca
+    //  Reduce la vida a 1 si te alcanza
     if (info.life() > 1) {
         info.setLife(1)
         scene.cameraShake(4, 500)
@@ -658,10 +656,10 @@ characterAnimations.loopFrames(mySprite, assets.animation`
 characterAnimations.loopFrames(mySprite, assets.animation`
         back_player
         `, 300, characterAnimations.rule(Predicate.FacingUp))
-//  ⭐️ LLAMAR A LA NUEVA FUNCIÓN DE SPAWN
+//  Spawneamos los enemigos
 spawn_enemis_multiple()
 spawnBoss()
-//  ✨ SPAWN DEL JEFE
+//  Spawneamos al jefe
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`
@@ -669,7 +667,6 @@ tiles.setCurrentTilemap(tilemap`
     `)
 music.setVolume(75)
 music.play(music.stringPlayable("E B C5 A B G A F ", 120), music.PlaybackMode.LoopingInBackground)
-//  ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function on_on_update() {
     let daño: number;
     let velocidad: number;
@@ -679,7 +676,7 @@ game.onUpdate(function on_on_update() {
     
     check_lives_enemys()
     mode_attack()
-    //  ✨ RIFLE AUTOMÁTICO
+    //  Logica del rifle automatico
     if (controller.B.isPressed()) {
         //  Valores por defecto
         daño = 1
@@ -727,7 +724,6 @@ game.onUpdate(function on_on_update() {
     
 })
 //  --- Inicialización del Juego ---
-//  --- RECUERDA ELIMINAR ESTA LÍNEA DE LAS GLOBALES: enemigo_status: StatusBarSprite = None ---
 //  Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)
 game.onUpdateInterval(1500, function on_update_interval() {
     let velocidad_proyectil: number;

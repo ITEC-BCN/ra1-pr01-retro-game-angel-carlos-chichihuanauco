@@ -6,7 +6,7 @@ class SpriteKind:
     tp_sala_jefe = SpriteKind.create()
     ENEMIE_PROJECTILE = SpriteKind.create()
     bullet_poryectile = SpriteKind.create()
-    # ✨ NUEVOS TIPOS PARA EL JEFE
+    # Definimos los tipos para el jefe y su explosion
     Boss = SpriteKind.create()
     ExplosionMortal = SpriteKind.create()
 
@@ -32,20 +32,20 @@ def cordenadas_sala8():
         [randint(3545, 8856), randint(1850, 1177)]]
 
 def mode_attack():
-    #  OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    # Hacemos que los enemigos tipo bullet sigan al jugador
     for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
         un_enemigo2.follow(mySprite, 10)
-    #  OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    # Hacemos que los enemigos normales sigan al jugador
     for un_enemigo22 in sprites.all_of_kind(SpriteKind.normal_bullet):
         un_enemigo22.follow(mySprite, 30)
-    # ✨ EL JEFE TE PERSIGUE (Un poco más rápido que los normales)
+    # El jefe persigue al jugador un poco mas rapido
     for boss in sprites.all_of_kind(SpriteKind.Boss):
         boss.follow(mySprite, 40)
 
 def on_on_overlap(sprite_player, sprite_proj):
     # Destruir el proyectil enemigo inmediatamente
     sprite_proj.destroy()
-    #  COMPROBACIÓN DE INVULNERABILIDAD
+    # Chequeamos si el jugador esta rodando para evitar daño
     if dodge_roll == True:
         pass
     else:
@@ -57,34 +57,32 @@ sprites.on_overlap(SpriteKind.player,
     SpriteKind.ENEMIE_PROJECTILE,
     on_on_overlap)
 
-# CONFIGURACIÓN DE ARMAS
+# Configuracion de las armas
 stats_armas = {
     "pistola":  { "damage": 1, "speed": 200, "cooldown": 500 },
     "shotgun":  { "damage": 3, "speed": 150, "cooldown": 1000 }, # Lenta pero fuerte
-    "rifle":    { "damage": 1, "speed": 350, "cooldown": 150 },  # ¡Metralleta rápida!
-    "Misterio": { "damage": 10,"speed": 100, "cooldown": 2000 }  # Lenta, dispara poco, pero DEVASTADORA
+    "rifle":    { "damage": 1, "speed": 350, "cooldown": 150 },  # Metralleta rapida
+    "Misterio": { "damage": 10,"speed": 100, "cooldown": 2000 }  # Lenta pero devastadora
 }
 
-# Variable para controlar el tiempo (para la cadencia)
+# Control del tiempo para la cadencia de disparo
 tiempo_ultimo_disparo = 0
 
 def on_up_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
-# Empujoncito final
+# Logica de empuje al chocar con NPCs
 def on_on_overlap2(sprite_player2, otherSprite):
     global distancia_repulsion2, delta_x, delta_y
-    # Definimos la distancia de repulsión (ajustable)
+    # Distancia de empuje
     distancia_repulsion2 = 10
-    # Un pequeño empujón es suficiente para romper el solapamiento.
-    # Verificamos si la colisión es con cualquiera de los NPCs
+    # Calculamos la diferencia entre posiciones para saber hacia donde empujar
     delta_x = sprite_player2.x - otherSprite.x
     delta_y = sprite_player2.y - otherSprite.y
     if otherSprite == npc_controles or otherSprite == npc_historia:
-        #  Lógica de Repulsión
+        # Calculamos direccion de repulsion
         delta_x = sprite_player2.x - otherSprite.x
-        # Repulsión Horizontal (Si la diferencia es significativa)
         if abs(delta_x) > abs(delta_y):
             if delta_x > 0:
                 sprite_player2.x += distancia_repulsion2
@@ -94,7 +92,7 @@ def on_on_overlap2(sprite_player2, otherSprite):
             sprite_player2.y += distancia_repulsion2
         else:
             sprite_player2.y -= distancia_repulsion2
-    # ---------------------------
+    # Dialogos de los NPCs
     if otherSprite == npc_controles:
         game.show_long_text("" + """
                 ¡Alto ahí, recluta!
@@ -107,6 +105,7 @@ def on_on_overlap2(sprite_player2, otherSprite):
                 """ + "(B): ¡FUEGO! Dispara antes de que te disparen a ti.",
             DialogLayout.BOTTOM)
     elif otherSprite == npc_historia:
+        # Historia del juego
         game.show_long_text("" + """
                 Hola... no pareces de por aquí.
                 """ + """
@@ -123,7 +122,7 @@ def on_on_overlap2(sprite_player2, otherSprite):
             DialogLayout.BOTTOM)
     elif otherSprite == npc_tienda:
         game.show_long_text("¡Bienvenido! ¿Qué te llevas hoy?", DialogLayout.BOTTOM)
-        # ✨ VENTA DE POCIONES (Dibujada a mano para evitar errores de null)
+        # Venta de pociones (usamos imagen generada por codigo)
         poti_img = img("""
             . . . . . . . . . . . . . . . .
             . . . . . . . 2 2 . . . . . . .
@@ -225,24 +224,24 @@ controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
 def on_on_overlap4(sprite_proj22, otherSprite42):
     global enemigo_status
-    # 1. Obtener la barra de vida del enemigo
+    # Obtenemos la barra de vida del enemigo golpeado
     enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite42)
     if enemigo_status:
-        # ⭐️ NUEVO: LEER EL DAÑO DE LA BALA ⭐️
+        # Obtenemos el daño configurado en el proyectil
         daño_recibido = sprites.read_data_number(sprite_proj22, "damage")
         if daño_recibido == 0:
             daño_recibido = 1
-        # 2. Restar ese daño específico
+        # Aplicamos el daño
         enemigo_status.value -= daño_recibido
-        # 3. Destruir bala
+        # Destruimos el proyectil
         sprite_proj22.destroy()
-        # 4. Muerte
+        # Si la vida llega a 0, eliminamos al enemigo
         if enemigo_status.value <= 0:
             info.change_score_by(100)
             otherSprite42.destroy(effects.disintegrate)
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.bullet_poryectile, on_on_overlap4)
 
-# Funciones de released
+# Funciones al soltar botones
 def on_down_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_DOWN))
 controller.down.on_event(ControllerButtonEvent.RELEASED, on_down_released)
@@ -264,22 +263,22 @@ def on_left_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_LEFT))
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
-# ✨ MODIFICADO: Lógica de compra para pociones
+# Modificamos la funcion de compra para incluir las pociones
 def intentar_comprar(nombre_arma: str, precio: number, imagen_arma: Image, sprite_jugador: Sprite):
     global fondo_blanco, arma_visual, compra, arma_actual, arma_hud
-    # 1. Crear Fondo Blanco
+    # Crear fondo blanco para resaltar el item
     fondo_blanco = sprites.create(image.create(30, 30), SpriteKind.food)
     fondo_blanco.image.fill(1)
     fondo_blanco.set_position(sprite_jugador.x, sprite_jugador.y - 40)
-    # 2. Crear el Arma Visual
+    # Crear el sprite visual del item
     arma_visual = sprites.create(imagen_arma, SpriteKind.food)
     arma_visual.set_position(sprite_jugador.x, sprite_jugador.y - 40)
-    # 3. Preguntar
+    # Preguntar al usuario
     compra = game.ask("" + nombre_arma + " ($" + ("" + str(precio)) + ")", "¿Comprar?")
-    # 4. Lógica de compra
+    # Procesar compra
     if compra:
         if info.score() >= precio:
-            # LÓGICA POCIÓN
+            # Logica para comprar pocion
             if nombre_arma == "Pocion":
                 if info.life() < 15:
                     info.change_score_by(0 - precio)
@@ -287,12 +286,12 @@ def intentar_comprar(nombre_arma: str, precio: number, imagen_arma: Image, sprit
                     music.power_up.play()
                     game.splash("¡Salud +1 Corazón! <3")
                 else:
-                    game.splash("¡Ya estás lleno de vida! UwO")
+                    game.splash("¡Ya estás lleno de vida!")
             else:
-                # LÓGICA ARMAS
+                # Logica para comprar armas
                 info.change_score_by(0 - precio)
                 arma_actual = nombre_arma
-                # Limpieza HUD
+                # Actualizamos el HUD del arma
                 arma_hud.destroy()
                 arma_hud = sprites.create(imagen_arma, SpriteKind.food)
                 arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
@@ -302,7 +301,7 @@ def intentar_comprar(nombre_arma: str, precio: number, imagen_arma: Image, sprit
         else:
             music.buzzer.play()
             game.splash("¡No tienes dinero! Necesitas " + ("" + str(precio)))
-    # 5. Limpiar
+    # Limpiamos los sprites temporales
     arma_visual.destroy()
     fondo_blanco.destroy()
 
@@ -336,7 +335,7 @@ def on_right_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT))
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
-# ⭐️ NUEVA FUNCIÓN: Genera enemigos
+# Funcion para generar multiples enemigos
 def spawn_enemis_multiple():
     check_current_sala()
     for pos_tile in posiciones_sala1:
@@ -387,19 +386,19 @@ def spawn_enemis_multiple():
         sb.value = 3
         sb.set_color(7, 2)
 
-# ✨ NUEVA FUNCIÓN: Invoca al Mini Jefe
+# Funcion para spawnear al jefe
 def spawnBoss():
-    # Usamos el primer frame de la animación derecha para crear el sprite inicial
+    # Usamos el primer frame de la animacion para crear el sprite
     boss_anim_start = assets.animation("bullet_key_right")[0]
     boss = sprites.create(boss_anim_start, SpriteKind.Boss)
-    # Posición aleatoria según tus coordenadas
+    # Posicion aleatoria en la sala
     boss.set_position(3123, 1200)
     
-    # Animaciones de movimiento
+    # Configuramos animaciones de movimiento
     characterAnimations.loop_frames(boss, assets.animation("bullet_key_left"), 200, characterAnimations.rule(Predicate.FACING_LEFT))
     characterAnimations.loop_frames(boss, assets.animation("bullet_key_right"), 200, characterAnimations.rule(Predicate.FACING_RIGHT))
     
-    # Barra de vida
+    # Barra de vida del jefe
     sb_boss = statusbars.create(20, 4, StatusBarKind.health)
     sb_boss.attach_to_sprite(boss)
     sb_boss.max = 20
@@ -435,7 +434,7 @@ def on_on_overlap6(sprite_proj2, otherSprite4):
             otherSprite4.destroy(effects.disintegrate)
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.normal_bullet, on_on_overlap6)
 
-# ✨ DAÑO AL JEFE
+# Daño al jefe por proyectiles
 def on_hit_boss(sprite_proj, boss_sprite):
     status_jefe = statusbars.get_status_bar_attached_to(StatusBarKind.health, boss_sprite)
     if status_jefe:
@@ -448,10 +447,10 @@ def on_hit_boss(sprite_proj, boss_sprite):
             boss_sprite.destroy()
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.Boss, on_hit_boss)
 
-# ✨ JEFE ATACA AL JUGADOR (Cuerpo a cuerpo)
+# El jefe daña al jugador al tocarlo
 def on_boss_hit_player(player_sprite, boss_sprite):
     if dodge_roll: return
-    info.change_life_by(-2) # El jefe quita más vida
+    info.change_life_by(-2) # El jefe hace mas daño
     scene.camera_shake(4, 500)
     music.thump.play()
     # Rebote simple
@@ -462,22 +461,22 @@ def on_boss_hit_player(player_sprite, boss_sprite):
     pause(500)
 sprites.on_overlap(SpriteKind.player, SpriteKind.Boss, on_boss_hit_player)
 
-# ✨ MUERTE DEL JEFE (EXPLOSIÓN)
+# Evento al destruir al jefe (explosion)
 def on_boss_destroyed(boss_sprite):
-    # Crear explosión usando el primer frame de la animación kill
+    # Usamos el primer cuadro de la animacion de muerte para crear la explosion
     anim_kill = assets.animation("bullet_key_kill")
     explosion = sprites.create(anim_kill[0], SpriteKind.ExplosionMortal)
     explosion.set_position(boss_sprite.x, boss_sprite.y)
     
-    # Ejecutar animación de muerte
+    # Ejecutamos la animacion de muerte
     animation.run_image_animation(explosion, anim_kill, 100, False)
-    explosion.lifespan = 1000 # Tiempo para que la animación termine
+    explosion.lifespan = 1000
     music.big_crash.play()
 sprites.on_destroyed(SpriteKind.Boss, on_boss_destroyed)
 
-# ✨ EXPLOSIÓN DAÑA AL JUGADOR
+# La explosion daña al jugador si lo toca
 def on_explosion_hit_player(player_sprite, explosion_sprite):
-    # Te deja a 1 de vida si te toca
+    # Reduce la vida a 1 si te alcanza
     if info.life() > 1:
         info.set_life(1)
         scene.camera_shake(4, 500)
@@ -696,9 +695,9 @@ characterAnimations.loop_frames(mySprite,
         """),
     300,
     characterAnimations.rule(Predicate.FACING_UP))
-# ⭐️ LLAMAR A LA NUEVA FUNCIÓN DE SPAWN
+# Spawneamos los enemigos
 spawn_enemis_multiple()
-spawnBoss() # ✨ SPAWN DEL JEFE
+spawnBoss() # Spawneamos al jefe
 controller.move_sprite(mySprite)
 scene.camera_follow_sprite(mySprite)
 tiles.set_current_tilemap(tilemap("""
@@ -707,14 +706,13 @@ tiles.set_current_tilemap(tilemap("""
 music.set_volume(75)
 music.play(music.string_playable("E B C5 A B G A F ", 120),
     music.PlaybackMode.LOOPING_IN_BACKGROUND)
-# ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 
 def on_on_update():
     global tiempo_ultimo_disparo, projectile
     check_lives_enemys()
     mode_attack()
     
-    # ✨ RIFLE AUTOMÁTICO
+    # Logica del rifle automatico
     if controller.B.is_pressed():
         # Valores por defecto
         daño = 1
@@ -756,7 +754,6 @@ def on_on_update():
 game.on_update(on_on_update)
 
 # --- Inicialización del Juego ---
-# --- RECUERDA ELIMINAR ESTA LÍNEA DE LAS GLOBALES: enemigo_status: StatusBarSprite = None ---
 # Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)
 
 def on_update_interval():
