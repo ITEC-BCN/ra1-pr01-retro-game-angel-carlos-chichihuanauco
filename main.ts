@@ -2,18 +2,19 @@ namespace SpriteKind {
     export const normal_bullet = SpriteKind.create()
 }
 // Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
-sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function (sprite_player, otherSprite) {
-    let delta_x: number;
-let delta_y: number;
+sprites.onOverlap(SpriteKind.Player, SpriteKind2.npc, function (sprite_player, otherSprite) {
+    let SpriteKind2: number;
 // Definimos la distancia de repulsión (ajustable)
     distancia_repulsion = 10
     // Un pequeño empujón es suficiente para romper el solapamiento.
     // Verificamos si la colisión es con cualquiera de los NPCs
+    delta_x = sprite_player.x - otherSprite.x
+    delta_y = sprite_player.y - otherSprite.y
     if (otherSprite == npc_controles || otherSprite == npc_historia) {
         // ⭐️ Lógica de Repulsión ⭐️
         // Calcular la diferencia entre las posiciones
         delta_x = sprite_player.x - otherSprite.x
-        delta_y = sprite_player.y - otherSprite.y
+        SpriteKind2 = sprite_player.y - otherSprite.y
         // Repulsión Horizontal (Si la diferencia es significativa)
         if (Math.abs(delta_x) > Math.abs(delta_y)) {
             if (delta_x > 0) {
@@ -61,12 +62,12 @@ let delta_y: number;
 // --- Inicialización del Juego ---
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
+    for (let un_enemigo of sprites.allOfKind(SpriteKind2.bullet_poryectile)) {
         un_enemigo.follow(mySprite, 10)
     }
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo of sprites.allOfKind(SpriteKind.normal_bullet)) {
-        un_enemigo.follow(mySprite, 30)
+    for (let un_enemigo2 of sprites.allOfKind(SpriteKind.normal_bullet)) {
+        un_enemigo2.follow(mySprite, 30)
     }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -143,7 +144,7 @@ controller.right.onEvent(ControllerButtonEvent.Released, function () {
 controller.left.onEvent(ControllerButtonEvent.Released, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingLeft))
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_jefe, function (sprite2, otherSprite3) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind2.tp_jefe, function (sprite2, otherSprite3) {
     mySprite.setPosition(2573, 2782)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -160,7 +161,7 @@ cordenadas_sala1()
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind.bullet_poryectile)
+            `, SpriteKind2.bullet_poryectile)
         x_coord = pos_tile[0]
         // El primer elemento es la X
         y_coord = pos_tile[1]
@@ -181,15 +182,15 @@ cordenadas_sala1()
         )
     }
     cordenadas_sala1()
-    for (let pos_tile of posiciones_sala1) {
+    for (let pos_tile2 of posiciones_sala1) {
         nuevo_enemigo = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.normal_bullet)
-        x_coord = pos_tile[0]
+        x_coord = pos_tile2[0]
         // El primer elemento es la X
-        y_coord = pos_tile[1]
+        y_coord = pos_tile2[1]
         // El segundo elemento es la Y
         nuevo_enemigo.setPosition(x_coord, y_coord)
         // Configuración de animaciones para ESTE enemigo (repetir para cada uno)
@@ -213,7 +214,7 @@ controller.up.onEvent(ControllerButtonEvent.Released, function () {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala, function (sprite, otherSprite2) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind2.tp_sala, function (sprite, otherSprite2) {
     mySprite.setPosition(2573, 2782)
 })
 function cordenadas_sala1 () {
@@ -230,17 +231,21 @@ function cordenadas_sala1 () {
 let posiciones_sala1: number[][] = []
 let dodge_roll = false
 let projectile: Sprite = null
+let delta_y = 0
+let delta_x = 0
 let npc_historia: Sprite = null
 let npc_controles: Sprite = null
 let mySprite: Sprite = null
 let distancia_repulsion = 0
-namespace SpriteKind {
+namespace SpriteKind2 {
     export const npc = SpriteKind.create()
     info.setScore(0)
     //  Creamos un sprite para el HUD
-    export const arma_hud = sprites.create(assets.image`gun`, SpriteKind.Food)
-    SpriteKind.arma_hud.setFlag(SpriteFlag.RelativeToCamera, true)
-    SpriteKind.arma_hud.setPosition(20, 105)
+    export const arma_hud = sprites.create(assets.image`
+        gun
+        `, SpriteKind.Food)
+    SpriteKind2.arma_hud.setFlag(SpriteFlag.RelativeToCamera, true)
+    SpriteKind2.arma_hud.setPosition(20, 105)
     //  Variable para saber qué arma tenemos equipada
     export const arma_actual = "pistola"
     export const bullet_poryectile = SpriteKind.create()
@@ -248,19 +253,19 @@ namespace SpriteKind {
     export const tp_jefe = SpriteKind.create()
 }
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
-npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind.npc)
+npc_controles = sprites.create(assets.image`cultist_npc`, SpriteKind2.npc)
 let tp_lobby_sala = sprites.create(img`
     . . . . . 5 . 5 . 5 . . . . . . 
     . . . . . . 5 5 5 . . . . . . . 
     . . . . . 5 5 . 5 5 . . . . . . 
-    `, SpriteKind.tp_sala)
+    `, SpriteKind2.tp_sala)
 let tp_sala_jefe = sprites.create(img`
     . . . . . 5 . 5 . 5 . . . . . . 
     . . . . . . 5 5 5 . . . . . . . 
     . . . . . 5 5 . 5 5 . . . . . . 
-    `, SpriteKind.tp_jefe)
-npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
-let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
+    `, SpriteKind2.tp_jefe)
+npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind2.npc)
+let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind2.npc)
 mySprite.setPosition(2573, 2782)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
