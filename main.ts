@@ -1,6 +1,11 @@
+/**
+ * --- Inicialización del Juego ---
+ */
 function mode_attack () {
-    bullets_proyectiles.follow(mySprite, 50)
-    bullet_enemie.follow(mySprite, 50)
+    // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for (let un_enemigo of sprites.allOfKind(SpriteKind.Enemy)) {
+        un_enemigo.follow(mySprite, 100)
+    }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
@@ -16,46 +21,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         projectile = sprites.createProjectileFromSprite(assets.image`bullet_initial`, mySprite, 0, -200)
     }
 })
-function spawn_enemis () {
-    bullets_proyectiles = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Enemy)
-    characterAnimations.loopFrames(
-    bullets_proyectiles,
-    assets.animation`myAnim`,
-    200,
-    characterAnimations.rule(Predicate.FacingLeft)
-    )
-    characterAnimations.loopFrames(
-    bullets_proyectiles,
-    assets.animation`myAnim0`,
-    200,
-    characterAnimations.rule(Predicate.FacingRight)
-    )
-    animation.runImageAnimation(
-    bullet_enemie,
-    assets.animation`bullet`,
-    200,
-    true
-    )
-    bullets_proyectiles.setPosition(320, 270)
-    bullet_enemie.setPosition(320, 270)
-}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterAnimationsEnabled(mySprite, false)
     if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight))) {
@@ -103,6 +68,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         characterAnimations.setCharacterAnimationsEnabled(mySprite, true)
     }
 })
+// Funciones de released (Optimizadas en la respuesta anterior)
 controller.down.onEvent(ControllerButtonEvent.Released, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
 })
@@ -118,38 +84,51 @@ controller.left.onEvent(ControllerButtonEvent.Released, function () {
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingRight))
 })
+// ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
+function spawn_enemis_multiple () {
+    let nuevo_enemigo: Sprite;
+for (let pos_tile of POSICIONES_ENEMIGOS) {
+        nuevo_enemigo = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Enemy)
+        nuevo_enemigo.setPosition(pos_tile, 270)
+        // Configuración de animaciones para ESTE enemigo (repetir para cada uno)
+        characterAnimations.loopFrames(
+        nuevo_enemigo,
+        assets.animation`myAnim`,
+        200,
+        characterAnimations.rule(Predicate.FacingLeft)
+        )
+        characterAnimations.loopFrames(
+        nuevo_enemigo,
+        assets.animation`myAnim0`,
+        200,
+        characterAnimations.rule(Predicate.FacingRight)
+        )
+    }
+}
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingUp))
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
-let projectile: Sprite = null
-let bullets_proyectiles: Sprite = null
 let dodge_roll = false
-let bullet_enemie: Sprite = null
+let projectile: Sprite = null
 let mySprite: Sprite = null
+let POSICIONES_ENEMIGOS: number[] = []
+POSICIONES_ENEMIGOS = [
+300,
+315,
+320,
+340
+]
 mySprite = sprites.create(assets.image`myImage`, SpriteKind.Player)
-bullet_enemie = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, SpriteKind.Enemy)
 mySprite.setPosition(300, 270)
-dodge_roll = false
+// Establecer velocidad máxima
+// Configuración de animaciones del jugador... (se mantiene igual)
 characterAnimations.loopFrames(
 mySprite,
 assets.animation`run_front_pilot`,
@@ -198,13 +177,15 @@ assets.animation`back_player`,
 300,
 characterAnimations.rule(Predicate.FacingUp)
 )
-spawn_enemis()
+// ⭐️ LLAMAR A LA NUEVA FUNCIÓN DE SPAWN
+spawn_enemis_multiple()
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
+// ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function () {
 	
 })
 game.onUpdateInterval(500, function () {
-    mode_attack()
+	
 })
