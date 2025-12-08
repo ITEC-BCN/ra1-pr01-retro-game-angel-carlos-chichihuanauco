@@ -23,6 +23,25 @@ e d d e f f e e f f e d d e
 . . . . c . . . . c . . . . 
 . . . . c . . . . c . . . . 
 `;
+            case "-ke!GZ#c6z":
+            case "bullet_initial":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . 4 4 . . . . . . . 
+. . . . . . 4 5 5 4 . . . . . . 
+. . . . . . 2 5 5 2 . . . . . . 
+. . . . . . . 2 2 . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
         }
         return null;
     })
@@ -1719,6 +1738,152 @@ c a a a 4 f a a a c c c c .
 ..2eeeeeeeeee2..
 .2445dd55554442.
 2f444444444444f2
+`];
+            case "myAnim":
+            case "anim16":return [img`
+...bbbbb.......
+..bbbbbbb......
+.bb1bcccbb.....
+.bd1dccccbb....
+bbbddbbcccbb...
+bd1dbbbbccbb...
+bd1dbbbccbbb...
+bbddbbbeeeee...
+bbbeeee2224ee..
+.be244422224eee
+.e22244eeeeeeee
+.e2eeee5555444e
+.eee5dd5555444.
+..445dd5555444.
+..445dd55555444
+..445dd55f55444
+..4f5fff5555444
+...445dd5555ee.
+...445ddeeee5e4
+...44eee5555e5e
+....e45dd444.e.
+.....4444......
+.....e55e......
+`, img`
+...............
+...bbbbb.......
+..bbbbbbb......
+.bbbcbcbbb.....
+.bd11cccbbb....
+bbb1dcccbbbb...
+bdbdbbbcccbb...
+bd11bbbccccb...
+bb1dbbbbbcbe...
+bbbdbbbbbbeeee.
+.bbbdbbbee42eee
+.eeeeeee22242ee
+.e22442222ee44e
+.e222442ee5544.
+..eeeeee555544.
+..445dd55555544
+..445dd55555544
+..4455dd55f5544
+...445fff555544
+...4f5dd5555e44
+...445ddd55e5e.
+....445dd544e..
+.....44444.....
+`, img`
+.....bbbb......
+....bbbbbb.....
+...bb1dccbb....
+..bbd1dcccbb...
+..bbbdbbccbb...
+.bbd1dbbbccbb..
+.bbd1dbbbccbb..
+.bbbddbbccbbb..
+.eeeeeeeeeeee..
+.e2244224242e..
+.e2244222424ee.
+.eeeeeeeeeeeeee
+.445dd5555444ee
+.445dd5555444e.
+.445dd5555444..
+.4f5dfff5f444..
+.445dd5555444..
+.445dd5555444..
+..eeeeeeeeee...
+.445dd555e444..
+.4444444e5e44..
+..e5e....e.....
+...e...........
+`, img`
+......bbbbbbb..
+.....bbd1ddbbb.
+.....bb1dddcbb.
+....bb1ddbbccbb
+...bbd1dbbccbbb
+...bbbdbbbcccbb
+...eeeedbbcccbb
+...e224eeeecbbb
+..e22244222eee.
+..eeeee422222e.
+..4455deeee22e.
+..445dd5555eeee
+.4455dd555554ee
+.445dd5555544e.
+.4f5dd5555544..
+445dfff555544..
+ee5dd555f554...
+44eee5555544...
+455ddeeee544...
+.44445554ee....
+.....4444......
+......e5e......
+.......e.......
+`, img`
+...............
+........bbbb...
+......bbbbbbb..
+.....bb11dcbbb.
+....bb1ddcccbb.
+....bdddbbccbbb
+....eeeebbcccbb
+....2244eeeccbb
+...e2244222eebb
+...eeeee22242e.
+..4455ddeee24e.
+..4455dd555eee.
+..445dd555554ee
+.4455dd555554ee
+.4f5fff555544e.
+.445dd55f5544..
+.eeedd5555544..
+4444eeee5544...
+44444444e544...
+5e4444444e44...
+e444444444e....
+....444444.....
+......e55e.....
+`, img`
+.....bbbb......
+....bbbbbb.....
+...bb1dccbb....
+..bbd1dcccbb...
+..bbbdbbccbb...
+.bbd1dbbbccbb..
+.bbd1dbbbccbb..
+.bbbddbbccbbb..
+.eeeeeeeeeeee..
+.e2244224242e..
+.e2244222424ee.
+.eeeeeeeeeeeeee
+.445dd5555444ee
+.445dd5555444e.
+.445dd5555444..
+.4f5fff55f444..
+.445dd5555444..
+.445dd5555444..
+..4eeeeeeeee...
+.4e4dd5555444..
+.e5e444444444..
+..e.......e5e..
+...........e...
 `];
         }
         return null;
