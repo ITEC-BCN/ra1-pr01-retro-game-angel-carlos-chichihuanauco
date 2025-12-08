@@ -49,6 +49,21 @@ sprites.on_overlap(SpriteKind.player,
     SpriteKind.ENEMIE_PROJECTILE,
     on_on_overlap)
 
+# CONFIGURACIÓN DE ARMAS
+# cooldown: Tiempo de espera entre disparos (en milisegundos). Menos es más rápido.
+# damage: Cuánta vida quita a los enemigos.
+# speed: Velocidad de la bala.
+stats_armas = {
+    "pistola":  { "damage": 1, "speed": 200, "cooldown": 500 },
+    "shotgun":  { "damage": 3, "speed": 150, "cooldown": 1000 }, # Lenta pero fuerte
+    "rifle":    { "damage": 1, "speed": 350, "cooldown": 150 },  # ¡Metralleta rápida!
+    "Misterio": { "damage": 10,"speed": 100, "cooldown": 2000 }  # Lenta, dispara poco, pero DEVASTADORA
+}
+
+# Variable para controlar el tiempo (para la cadencia)
+tiempo_ultimo_disparo = 0
+
+
 def on_up_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
@@ -136,38 +151,64 @@ sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap2)
 
 def on_on_overlap3(sprite, otherSprite2):
     mySprite.set_position(270, 3000)
+    music.stop_all_sounds()
+    music.set_volume(75)
+    music.play(music.string_playable("C F D C E C G D ", 120),
+        music.PlaybackMode.LOOPING_IN_BACKGROUND)
 sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_jefe, on_on_overlap3)
 
 def on_b_pressed():
-    global projectile
+    global projectile, tiempo_ultimo_disparo
+    
+    # --- 1. DEFINIR ESTADÍSTICAS (Manual y seguro) ---
+    # Valores por defecto (Pistola)
+    daño = 1
+    velocidad = 200
+    cooldown = 500
+    
+    # Ajustamos según el arma que tengas
+    if arma_actual == "shotgun":
+        daño = 3
+        velocidad = 150
+        cooldown = 1000
+    elif arma_actual == "rifle":
+        daño = 1
+        velocidad = 350
+        cooldown = 150
+    elif arma_actual == "Misterio":
+        daño = 10
+        velocidad = 100
+        cooldown = 2000
+        
+    # --- 2. CONTROL DE CADENCIA ---
+    if game.runtime() - tiempo_ultimo_disparo < cooldown:
+        return
+    
+    tiempo_ultimo_disparo = game.runtime()
+    
+    # --- 3. CALCULAR DIRECCIÓN ---
+    vx = 0
+    vy = 0
+     
     if characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_RIGHT)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            200,
-            0)
+        vx = velocidad
     elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_LEFT)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_LEFT)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            -200,
-            0)
+        vx = -velocidad
     elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_DOWN)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_DOWN)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            0,
-            200)
+        vy = velocidad
     elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_UP)) or characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.MOVING_UP)):
-        projectile = sprites.create_projectile_from_sprite(assets.image("""
-                bullet_initial
-                """),
-            mySprite,
-            0,
-            -200)
+        vy = -velocidad
+        
+    # Si está quieto, dispara a la derecha por defecto
+    if vx == 0 and vy == 0:
+        vx = velocidad
+
+    # --- 4. DISPARAR ---
+    projectile = sprites.create_projectile_from_sprite(assets.image("""bullet_initial"""), mySprite, vx, vy)
+    
+    # Guardamos el daño (ahora sí, sin errores raros)
+    sprites.set_data_number(projectile, "damage", daño)
+
 controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
 
 def on_a_pressed():
@@ -223,21 +264,31 @@ controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
 def on_on_overlap4(sprite_proj22, otherSprite42):
     global enemigo_status
-    # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
+    
+    # 1. Obtener la barra de vida del enemigo
     enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite42)
+    
     if enemigo_status:
-        # 2. Reducir la vida de la barra de estado específica
-        enemigo_status.value += -1
-        # Reduce la vida en 1 (o el daño deseado)
-        # 3. Destruir el proyectil
+        # ⭐️ NUEVO: LEER EL DAÑO DE LA BALA ⭐️
+        # Leemos el numerito "damage" que guardamos al disparar
+        daño_recibido = sprites.read_data_number(sprite_proj22, "damage")
+        
+        # Si por alguna razón es 0 (ej. olvidaste ponerlo), que haga 1 de daño mínimo
+        if daño_recibido == 0:
+            daño_recibido = 1
+            
+        # 2. Restar ese daño específico
+        enemigo_status.value -= daño_recibido
+        
+        # 3. Destruir bala
         sprite_proj22.destroy()
-        # 4. Comprobar si el enemigo muere
+        
+        # 4. Muerte
         if enemigo_status.value <= 0:
             info.change_score_by(100)
             otherSprite42.destroy(effects.disintegrate)
-sprites.on_overlap(SpriteKind.projectile,
-    SpriteKind.bullet_poryectile,
-    on_on_overlap4)
+
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.bullet_poryectile, on_on_overlap4)
 
 # Funciones de released (Optimizadas en la respuesta anterior)
 
@@ -420,24 +471,31 @@ def cordenadas_sala5():
 
 def on_on_overlap6(sprite_proj2, otherSprite4):
     global enemigo_status
-    # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
     enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite4)
+    
     if enemigo_status:
-        # 2. Reducir la vida de la barra de estado específica
-        enemigo_status.value += -1
-        # Reduce la vida en 1 (o el daño deseado)
-        # 3. Destruir el proyectil
+        # ⭐️ LEER DAÑO ⭐️
+        daño_recibido = sprites.read_data_number(sprite_proj2, "damage")
+        if daño_recibido == 0:
+            daño_recibido = 1
+            
+        # Restar el daño real
+        enemigo_status.value -= daño_recibido
+        
         sprite_proj2.destroy()
-        # 4. Comprobar si el enemigo muere
+        
         if enemigo_status.value <= 0:
             info.change_score_by(100)
             otherSprite4.destroy(effects.disintegrate)
-sprites.on_overlap(SpriteKind.projectile,
-    SpriteKind.normal_bullet,
-    on_on_overlap6)
+
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.normal_bullet, on_on_overlap6)
 
 def on_on_overlap7(sprite2, otherSprite3):
     mySprite.set_position(2573, 2782)
+    music.stop_all_sounds()
+    music.set_volume(75)
+    music.play(music.string_playable("F E D A B A E E ", 120),
+        music.PlaybackMode.LOOPING_IN_BACKGROUND)
 sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_lobby, on_on_overlap7)
 
 def cordenadas_sala4():
@@ -624,6 +682,9 @@ scene.camera_follow_sprite(mySprite)
 tiles.set_current_tilemap(tilemap("""
     first_dungeon
     """))
+music.set_volume(75)
+music.play(music.string_playable("E B C5 A B G A F ", 120),
+    music.PlaybackMode.LOOPING_IN_BACKGROUND)
 # ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 
 def on_on_update():
