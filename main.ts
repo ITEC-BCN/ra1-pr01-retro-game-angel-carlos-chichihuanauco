@@ -6,6 +6,30 @@ namespace SpriteKind {
     export const ENEMIE_PROJECTILE = SpriteKind.create()
     export const bullet_poryectile = SpriteKind.create()
 }
+function cordenadas_sala3 () {
+    posiciones_sala1 = [
+    [randint(3336, 3128), randint(2025, 2378)],
+    [randint(3336, 3128), randint(2025, 2378)],
+    [randint(3336, 3128), randint(2025, 2378)],
+    [randint(3336, 3128), randint(2025, 2378)],
+    [randint(3336, 3128), randint(2025, 2378)]
+    ]
+}
+function cordenadas_sala8 () {
+    posiciones_sala1 = [
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)],
+    [randint(3545, 8856), randint(1850, 1177)]
+    ]
+}
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for (let un_enemigo2 of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
@@ -181,6 +205,20 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.bullet_poryectile, function 
 controller.down.onEvent(ControllerButtonEvent.Released, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
 })
+function cordenadas_sala2 () {
+    posiciones_sala1 = [
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)],
+    [randint(2873, 2021), randint(2487, 2137)]
+    ]
+}
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingLeft))
 })
@@ -332,6 +370,14 @@ controller.up.onEvent(ControllerButtonEvent.Released, function () {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingDown))
 })
+function cordenadas_sala5 () {
+    posiciones_sala1 = [
+    [randint(954, 536), randint(1639, 1465)],
+    [randint(954, 536), randint(1639, 1465)],
+    [randint(954, 536), randint(1639, 1465)],
+    [randint(954, 536), randint(1639, 1465)]
+    ]
+}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function (sprite_proj2, otherSprite4) {
     // 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
     enemigo_status = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, otherSprite4)
@@ -351,6 +397,31 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function (spr
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_lobby, function (sprite2, otherSprite3) {
     mySprite.setPosition(2573, 2782)
 })
+function cordenadas_sala4 () {
+    posiciones_sala1 = [
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)],
+    [randint(2055, 1703), randint(1850, 1177)]
+    ]
+}
+function cordenadas_sala6 () {
+    posiciones_sala1 = [
+    [randint(2714, 2200), randint(1847, 1609)],
+    [randint(2714, 2200), randint(1847, 1609)],
+    [randint(2714, 2200), randint(1847, 1609)],
+    [randint(2714, 2200), randint(1847, 1609)],
+    [randint(2714, 2200), randint(1847, 1609)],
+    [randint(2714, 2200), randint(1847, 1609)]
+    ]
+}
 function cordenadas_sala1 () {
     posiciones_sala1 = [
     [randint(2201, 1544), randint(2601, 2887)],
@@ -362,7 +433,16 @@ function cordenadas_sala1 () {
     [randint(2201, 1544), randint(2601, 2887)]
     ]
 }
-let posiciones_sala1: number[][] = []
+function cordenadas_sala7 () {
+    posiciones_sala1 = [
+    [randint(2714, 2200), randint(1450, 1177)],
+    [randint(2714, 2200), randint(1450, 1177)],
+    [randint(2714, 2200), randint(1450, 1177)],
+    [randint(2714, 2200), randint(1450, 1177)],
+    [randint(2714, 2200), randint(1450, 1177)],
+    [randint(2714, 2200), randint(1450, 1177)]
+    ]
+}
 let distancia_repulsion = 0
 let compra = false
 let arma_visual: Sprite = null
@@ -372,6 +452,7 @@ let projectile: Sprite = null
 let delta_y = 0
 let delta_x = 0
 let dodge_roll = false
+let posiciones_sala1: number[][] = []
 let npc_tienda: Sprite = null
 let npc_historia: Sprite = null
 let npc_controles: Sprite = null
