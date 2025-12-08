@@ -6,6 +6,9 @@ class SpriteKind:
     tp_sala_jefe = SpriteKind.create()
     ENEMIE_PROJECTILE = SpriteKind.create()
     bullet_poryectile = SpriteKind.create()
+
+info.set_score(9999)
+
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
@@ -336,16 +339,6 @@ def on_on_overlap4(sprite2, otherSprite3):
     mySprite.set_position(2573, 2782)
 sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_lobby, on_on_overlap4)
 
-def cordenadas_sala1():
-    global posiciones_sala1
-    posiciones_sala1 = [[randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)]]
-
 def on_on_overlap5(sprite_proj2, otherSprite42):
     global enemigo_status
     # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
@@ -360,9 +353,18 @@ def on_on_overlap5(sprite_proj2, otherSprite42):
         if enemigo_status.value <= 0:
             otherSprite42.destroy(effects.disintegrate)
 sprites.on_overlap(SpriteKind.projectile,
-    SpriteKind.ENEMIE_PROJECTILE,
+    SpriteKind.bullet_poryectile,
     on_on_overlap5)
 
+def cordenadas_sala1():
+    global posiciones_sala1
+    posiciones_sala1 = [[randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)],
+        [randint(2201, 1544), randint(2601, 2887)]]
 posiciones_sala1: List[List[number]] = []
 enemigo_status: StatusBarSprite = None
 compra = False
@@ -391,19 +393,11 @@ arma_actual = "pistola"
 @namespace
 class SpriteKind22:
     npc2 = SpriteKind.create()
-    
     tp_sala = SpriteKind.create()
     tp_jefe = SpriteKind.create()
     tp_sala_lobby2 = SpriteKind.create()
     tp_sala_jefe2 = SpriteKind.create()
-    # Creamos un sprite para el HUD
-    arma_hud2 = sprites.create(assets.image("""
-        gun
-        """), SpriteKind.food)
-    SpriteKind22.arma_hud2.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
-    SpriteKind22.arma_hud2.set_position(20, 105)
-    # Variable para saber qué arma tenemos equipada
-    arma_actual2 = "pistola"
+    
 mySprite = sprites.create(assets.image("""
     myImage
     """), SpriteKind.player)
