@@ -4,10 +4,11 @@ namespace SpriteKind {
     export const tp_sala_lobby = SpriteKind.create()
     export const tp_sala_jefe = SpriteKind.create()
     export const ENEMIE_PROJECTILE = SpriteKind.create()
+    export const bullet_poryectile = SpriteKind.create()
 }
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for (let un_enemigo2 of sprites.allOfKind(SpriteKind22.bullet_poryectile)) {
+    for (let un_enemigo2 of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
         un_enemigo2.follow(mySprite, 10)
     }
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
@@ -222,7 +223,7 @@ cordenadas_sala1()
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind22.bullet_poryectile)
+            `, SpriteKind.bullet_poryectile)
         x_coord = pos_tile[0]
         // El primer elemento es la X
         y_coord = pos_tile[1]
@@ -290,6 +291,21 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_lobby, function (sprite2, otherSprite3) {
     mySprite.setPosition(2573, 2782)
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.bullet_poryectile, function (sprite_proj2, otherSprite42) {
+    // 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
+    enemigo_status = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, otherSprite42)
+    if (enemigo_status) {
+        // 2. Reducir la vida de la barra de estado específica
+        enemigo_status.value += -1
+        // Reduce la vida en 1 (o el daño deseado)
+        // 3. Destruir el proyectil
+        sprite_proj2.destroy()
+        // 4. Comprobar si el enemigo muere
+        if (enemigo_status.value <= 0) {
+            otherSprite42.destroy(effects.disintegrate)
+        }
+    }
+})
 function cordenadas_sala1 () {
     posiciones_sala1 = [
     [randint(2201, 1544), randint(2601, 2887)],
@@ -326,7 +342,6 @@ arma_hud.setPosition(20, 105)
 arma_actual = "pistola"
 namespace SpriteKind22 {
     export const npc2 = SpriteKind.create()
-    export const bullet_poryectile = SpriteKind.create()
     export const tp_sala = SpriteKind.create()
     export const tp_jefe = SpriteKind.create()
     export const tp_sala_lobby2 = SpriteKind.create()
@@ -444,7 +459,7 @@ let vx_enemigo: number;
 let vy_enemigo: number;
 let proj_a_lanzar: Sprite;
 // El bucle de persecución en mode_attack ya garantiza que los enemigos se están moviendo.
-    for (let un_enemigo of sprites.allOfKind(SpriteKind22.bullet_poryectile)) {
+    for (let un_enemigo of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
         // 1. Creamos una variable LOCAL para el proyectil, pero la inicializamos dentro del bloque.
         velocidad_proyectil = 100
         vx_enemigo = un_enemigo.vx

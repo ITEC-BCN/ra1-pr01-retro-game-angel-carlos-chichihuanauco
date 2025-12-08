@@ -5,74 +5,14 @@ class SpriteKind:
     tp_sala_lobby = SpriteKind.create()
     tp_sala_jefe = SpriteKind.create()
     ENEMIE_PROJECTILE = SpriteKind.create()
-# --- Inicialización del Juego ---
-# --- RECUERDA ELIMINAR ESTA LÍNEA DE LAS GLOBALES: enemigo_status: StatusBarSprite = None ---
-
-def enemy_shoot_logic_simple():
-    # El bucle de persecución en mode_attack ya garantiza que los enemigos se están moviendo.
-    for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
-        
-        # 1. Creamos una variable LOCAL para el proyectil, pero la inicializamos dentro del bloque.
-        
-        velocidad_proyectil = 100
-        vx_enemigo = un_enemigo.vx
-        vy_enemigo = un_enemigo.vy
-        
-        # Usamos una variable auxiliar para el proyectil local
-        proj_a_lanzar = None
-        
-        # Determinar la dirección principal (Horizontal vs. Vertical)
-        if abs(vx_enemigo) > abs(vy_enemigo):
-            # Movimiento dominante es HORIZONTAL
-            if vx_enemigo > 0:
-                # Dispara a la DERECHA
-                proj_a_lanzar = sprites.create_projectile_from_sprite(
-                    assets.image(""" bullet_initial"""),
-                    un_enemigo,
-                    velocidad_proyectil,
-                    0
-                )
-            elif vx_enemigo < 0:
-                # Dispara a la IZQUIERDA
-                proj_a_lanzar = sprites.create_projectile_from_sprite(
-                    assets.image(""" bullet_initial"""),
-                    un_enemigo,
-                    -velocidad_proyectil,
-                    0
-                )
-        
-        elif abs(vy_enemigo) > 0:
-            # Movimiento dominante es VERTICAL
-            if vy_enemigo > 0:
-                # Dispara ABAJO
-                proj_a_lanzar = sprites.create_projectile_from_sprite(
-                    assets.image(""" bullet_initial"""),
-                    un_enemigo,
-                    0,
-                    velocidad_proyectil
-                )
-            else: # vy_enemigo < 0
-                # Dispara ARRIBA
-                proj_a_lanzar = sprites.create_projectile_from_sprite(
-                    assets.image(""" bullet_initial"""),
-                    un_enemigo,
-                    0,
-                    -velocidad_proyectil
-                )
-        
-        # 2. Si se asignó un valor (es decir, el proyectil existe), se le da el SpriteKind.
-        if proj_a_lanzar: # Esto es un atajo para if proj_a_lanzar != None:
-            proj_a_lanzar.set_kind(SpriteKind.ENEMIE_PROJECTILE)
-
-# Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)
-game.on_update_interval(1500, enemy_shoot_logic_simple)
+    bullet_poryectile = SpriteKind.create()
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
-        un_enemigo.follow(mySprite, 10)
+    for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
+        un_enemigo2.follow(mySprite, 10)
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo2 in sprites.all_of_kind(SpriteKind.normal_bullet):
-        un_enemigo2.follow(mySprite, 30)
+    for un_enemigo22 in sprites.all_of_kind(SpriteKind.normal_bullet):
+        un_enemigo22.follow(mySprite, 30)
 
 def on_up_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
@@ -270,15 +210,15 @@ def intentar_comprar(nombre_arma: str, precio: number, imagen_arma: Image, sprit
         if info.score() >= precio:
             info.change_score_by(0 - precio)
             arma_actual = nombre_arma
-                        
             # --- TRUCO DE LIMPIEZA ---
             # Si se veían superpuestos, esto fuerza a que solo haya uno
-            arma_hud.destroy() # Borramos el viejo
-            arma_hud = sprites.create(imagen_arma, SpriteKind.food) # Creamos el nuevo
+            arma_hud.destroy()
+            # Borramos el viejo
+            arma_hud = sprites.create(imagen_arma, SpriteKind.food)
+            # Creamos el nuevo
             arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
             arma_hud.set_position(20, 105)
             # -------------------------
-                        
             music.ba_ding.play()
             game.splash("¡Comprado! Tienes: " + nombre_arma)
         else:
@@ -326,7 +266,7 @@ def spawn_enemis_multiple():
                 . . . . . . . . . . . . . . . .
                 . . . . . . . . . . . . . . . .
                 """),
-            SpriteKind22.bullet_poryectile)
+            SpriteKind.bullet_poryectile)
         x_coord = pos_tile[0]
         # El primer elemento es la X
         y_coord = pos_tile[1]
@@ -405,6 +345,24 @@ def cordenadas_sala1():
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)]]
+
+def on_on_overlap5(sprite_proj2, otherSprite42):
+    global enemigo_status
+    # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
+    enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite42)
+    if enemigo_status:
+        # 2. Reducir la vida de la barra de estado específica
+        enemigo_status.value += -1
+        # Reduce la vida en 1 (o el daño deseado)
+        # 3. Destruir el proyectil
+        sprite_proj2.destroy()
+        # 4. Comprobar si el enemigo muere
+        if enemigo_status.value <= 0:
+            otherSprite42.destroy(effects.disintegrate)
+sprites.on_overlap(SpriteKind.projectile,
+    SpriteKind.ENEMIE_PROJECTILE,
+    on_on_overlap5)
+
 posiciones_sala1: List[List[number]] = []
 enemigo_status: StatusBarSprite = None
 compra = False
@@ -433,12 +391,11 @@ arma_actual = "pistola"
 @namespace
 class SpriteKind22:
     npc2 = SpriteKind.create()
-    bullet_poryectile = SpriteKind.create()
+    
     tp_sala = SpriteKind.create()
     tp_jefe = SpriteKind.create()
-    tp_sala_lobby = SpriteKind.create()
-    tp_sala_jefe = SpriteKind.create()
-    
+    tp_sala_lobby2 = SpriteKind.create()
+    tp_sala_jefe2 = SpriteKind.create()
     # Creamos un sprite para el HUD
     arma_hud2 = sprites.create(assets.image("""
         gun
@@ -459,7 +416,7 @@ tp_lobby_sala = sprites.create(img("""
         . . . . . 5 5 . 5 5 . . . . . .
         """),
     SpriteKind.tp_sala_lobby)
-tp_sala_jefe2 = sprites.create(img("""
+tp_sala_jefe22 = sprites.create(img("""
         . . . . . 5 . 5 . 5 . . . . . .
         . . . . . . 5 5 5 . . . . . . .
         . . . . . 5 5 . 5 5 . . . . . .
@@ -474,7 +431,7 @@ npc_tienda = sprites.create(assets.image("""
 mySprite.set_position(335, 316)
 npc_controles.set_position(390, 270)
 tp_lobby_sala.set_position(330, 360)
-tp_sala_jefe2.set_position(3135, 311)
+tp_sala_jefe22.set_position(3135, 311)
 npc_historia.set_position(390, 330)
 npc_tienda.set_position(115, 1520)
 # Establecer velocidad máxima
@@ -553,5 +510,61 @@ tiles.set_current_tilemap(tilemap("""
 # ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 
 def on_on_update():
-    pass
+    mode_attack()
 game.on_update(on_on_update)
+
+# --- Inicialización del Juego ---
+# --- RECUERDA ELIMINAR ESTA LÍNEA DE LAS GLOBALES: enemigo_status: StatusBarSprite = None ---
+# Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)
+
+def on_update_interval():
+    # El bucle de persecución en mode_attack ya garantiza que los enemigos se están moviendo.
+    for un_enemigo in sprites.all_of_kind(SpriteKind.bullet_poryectile):
+        # 1. Creamos una variable LOCAL para el proyectil, pero la inicializamos dentro del bloque.
+        velocidad_proyectil = 100
+        vx_enemigo = un_enemigo.vx
+        vy_enemigo = un_enemigo.vy
+        proj_a_lanzar = None
+        # Determinar la dirección principal (Horizontal vs. Vertical)
+        if abs(vx_enemigo) > abs(vy_enemigo):
+            # Movimiento dominante es HORIZONTAL
+            if vx_enemigo > 0:
+                # Dispara a la DERECHA
+                proj_a_lanzar = sprites.create_projectile_from_sprite(assets.image("""
+                        bullet_initial
+                        """),
+                    un_enemigo,
+                    velocidad_proyectil,
+                    0)
+            elif vx_enemigo < 0:
+                # Dispara a la IZQUIERDA
+                proj_a_lanzar = sprites.create_projectile_from_sprite(assets.image("""
+                        bullet_initial
+                        """),
+                    un_enemigo,
+                    0 - velocidad_proyectil,
+                    0)
+        elif abs(vy_enemigo) > 0:
+            # Movimiento dominante es VERTICAL
+            if vy_enemigo > 0:
+                # Dispara ABAJO
+                proj_a_lanzar = sprites.create_projectile_from_sprite(assets.image("""
+                        bullet_initial
+                        """),
+                    un_enemigo,
+                    0,
+                    velocidad_proyectil)
+            else:
+                # vy_enemigo < 0
+                # Dispara ARRIBA
+                proj_a_lanzar = sprites.create_projectile_from_sprite(assets.image("""
+                        bullet_initial
+                        """),
+                    un_enemigo,
+                    0,
+                    0 - velocidad_proyectil)
+        # 2. Si se asignó un valor (es decir, el proyectil existe), se le da el SpriteKind.
+        if proj_a_lanzar:
+            # Esto es un atajo para if proj_a_lanzar != None:
+            proj_a_lanzar.set_kind(SpriteKind.ENEMIE_PROJECTILE)
+game.on_update_interval(1500, on_update_interval)
