@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const normal_bullet = SpriteKind.create()
+}
 // Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
 sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function (sprite_player, otherSprite) {
     let delta_x: number;
@@ -59,7 +62,11 @@ let delta_y: number;
 function mode_attack () {
     // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for (let un_enemigo of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
-        un_enemigo.follow(mySprite, 100)
+        un_enemigo.follow(mySprite, 10)
+    }
+    // ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for (let un_enemigo of sprites.allOfKind(SpriteKind.normal_bullet)) {
+        un_enemigo.follow(mySprite, 30)
     }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -179,7 +186,7 @@ cordenadas_sala1()
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind.bullet_poryectile)
+            `, SpriteKind.normal_bullet)
         x_coord = pos_tile[0]
         // El primer elemento es la X
         y_coord = pos_tile[1]
@@ -188,9 +195,15 @@ cordenadas_sala1()
         // Configuración de animaciones para ESTE enemigo (repetir para cada uno)
         characterAnimations.loopFrames(
         nuevo_enemigo,
-        assets.animation`myAnim`,
+        assets.animation`bullet`,
         200,
         characterAnimations.rule(Predicate.FacingLeft)
+        )
+        characterAnimations.loopFrames(
+        nuevo_enemigo,
+        assets.animation`bullet0`,
+        200,
+        characterAnimations.rule(Predicate.FacingRight)
         )
     }
 }
@@ -205,6 +218,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala, function (sprite, other
 })
 function cordenadas_sala1 () {
     posiciones_sala1 = [
+    [randint(2201, 1544), randint(2601, 2887)],
+    [randint(2201, 1544), randint(2601, 2887)],
+    [randint(2201, 1544), randint(2601, 2887)],
     [randint(2201, 1544), randint(2601, 2887)],
     [randint(2201, 1544), randint(2601, 2887)],
     [randint(2201, 1544), randint(2601, 2887)],
@@ -245,7 +261,7 @@ let tp_sala_jefe = sprites.create(img`
     `, SpriteKind.tp_jefe)
 npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
 let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
-mySprite.setPosition(335, 316)
+mySprite.setPosition(2573, 2782)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
 tp_sala_jefe.setPosition(3135, 311)
@@ -324,5 +340,5 @@ scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
 // ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function () {
-	
+    mode_attack()
 })
