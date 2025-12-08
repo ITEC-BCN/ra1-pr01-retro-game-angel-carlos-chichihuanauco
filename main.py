@@ -6,6 +6,35 @@ class SpriteKind:
     tp_sala_jefe = SpriteKind.create()
     ENEMIE_PROJECTILE = SpriteKind.create()
     bullet_poryectile = SpriteKind.create()
+
+def on_player_hit_by_walking_enemy(sprite_player: Sprite, walking_enemy: Sprite):
+    global dodge_roll
+    
+    # ⭐️ COMPROBACIÓN DE INVULNERABILIDAD ⭐️
+    if dodge_roll == True:
+        
+        return # Si es invulnerable, salimos sin daño
+        
+    # Si no es invulnerable, recibe daño
+    info.change_life_by(-1)
+    scene.camera_shake(4, 250) # Agregamos una sacudida un poco más fuerte para el contacto
+    music.thump.play()
+    
+    # OPCIONAL: Repulsión para romper el solapamiento inmediatamente
+    # Puedes reutilizar la lógica de repulsión de los NPCs o simplificarla:
+    distancia_repulsion = 15
+    if sprite_player.x > walking_enemy.x:
+        sprite_player.x += distancia_repulsion
+    else:
+        sprite_player.x -= distancia_repulsion
+    if sprite_player.y > walking_enemy.y:
+        sprite_player.y += distancia_repulsion
+    else:
+        sprite_player.y -= distancia_repulsion
+
+
+# 2. Registrar el evento de colisión para el daño por contacto
+sprites.on_overlap(SpriteKind.player, SpriteKind.normal_bullet, on_player_hit_by_walking_enemy)
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
