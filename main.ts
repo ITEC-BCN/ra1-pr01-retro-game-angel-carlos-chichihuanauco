@@ -379,7 +379,7 @@ function spawn_enemis_multiple() {
     let x_coord: number;
     let y_coord: number;
     let sb: StatusBarSprite;
-    cordenadas_sala1()
+    check_current_sala()
     for (let pos_tile of posiciones_sala1) {
         nuevo_enemigo = sprites.create(img`
                 . . . . . . . . . . . . . . . .
@@ -405,7 +405,7 @@ function spawn_enemis_multiple() {
         sb.value = 3
         sb.setColor(7, 2)
     }
-    cordenadas_sala1()
+    check_current_sala()
     for (let pos_tile2 of posiciones_sala1) {
         nuevo_enemigo = sprites.create(img`
                 . . . . . . . . . . . . . . . .
@@ -466,6 +466,37 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function on_o
     }
     
 })
+function check_current_sala() {
+    
+    if (current_sala == 1) {
+        cordenadas_sala1()
+    } else if (current_sala == 2) {
+        cordenadas_sala2()
+    } else if (current_sala == 3) {
+        cordenadas_sala3()
+    } else if (current_sala == 4) {
+        cordenadas_sala4()
+    } else if (current_sala == 5) {
+        cordenadas_sala5()
+    } else if (current_sala == 6) {
+        cordenadas_sala6()
+    } else if (current_sala == 7) {
+        cordenadas_sala7()
+    } else if (current_sala == 8) {
+        cordenadas_sala8()
+    }
+    
+}
+
+function check_lives_enemys() {
+    
+    if (sprites.allOfKind(SpriteKind.bullet_poryectile).length == 0 && sprites.allOfKind(SpriteKind.normal_bullet).length == 0) {
+        current_sala += 1
+        spawn_enemis_multiple()
+    }
+    
+}
+
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_lobby, function on_on_overlap7(sprite2: Sprite, otherSprite3: Sprite) {
     mySprite.setPosition(2573, 2782)
     music.stopAllSounds()
@@ -511,6 +542,7 @@ let arma_hud : Sprite = null
 let distancia_repulsion2 = 0
 info.setScore(0)
 info.setLife(15)
+let current_sala = 1
 //  Dinero inicial
 //  Creamos el HUD (Ahora está fuera de la clase)
 arma_hud = sprites.create(assets.image`
@@ -608,6 +640,7 @@ music.setVolume(75)
 music.play(music.stringPlayable("E B C5 A B G A F ", 120), music.PlaybackMode.LoopingInBackground)
 //  ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function on_on_update() {
+    check_lives_enemys()
     mode_attack()
 })
 //  --- Inicialización del Juego ---

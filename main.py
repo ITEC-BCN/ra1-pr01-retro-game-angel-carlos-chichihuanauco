@@ -389,7 +389,7 @@ controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 # ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 def spawn_enemis_multiple():
-    cordenadas_sala1()
+    check_current_sala()
     for pos_tile in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
                 . . . . . . . . . . . . . . . .
@@ -421,7 +421,7 @@ def spawn_enemis_multiple():
         # Ejemplo de vida inicial
         sb.value = 3
         sb.set_color(7, 2)
-    cordenadas_sala1()
+    check_current_sala()
     for pos_tile2 in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
                 . . . . . . . . . . . . . . . .
@@ -490,6 +490,31 @@ def on_on_overlap6(sprite_proj2, otherSprite4):
 
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.normal_bullet, on_on_overlap6)
 
+def check_current_sala():
+    global current_sala
+    if current_sala == 1:
+        cordenadas_sala1()
+    elif current_sala == 2:
+        cordenadas_sala2()
+    elif current_sala == 3:
+        cordenadas_sala3()
+    elif current_sala == 4:
+        cordenadas_sala4()
+    elif current_sala == 5:
+        cordenadas_sala5()
+    elif current_sala == 6:
+        cordenadas_sala6()
+    elif current_sala == 7:
+        cordenadas_sala7()
+    elif current_sala == 8:
+        cordenadas_sala8()
+
+def check_lives_enemys():
+    global current_sala
+    if len(sprites.all_of_kind(SpriteKind.bullet_poryectile)) == 0  and len(sprites.all_of_kind(SpriteKind.normal_bullet)) == 0:
+        current_sala +=1
+        spawn_enemis_multiple()
+
 def on_on_overlap7(sprite2, otherSprite3):
     mySprite.set_position(2573, 2782)
     music.stop_all_sounds()
@@ -555,6 +580,7 @@ arma_hud: Sprite = None
 distancia_repulsion2 = 0
 info.set_score(0)
 info.set_life(15)
+current_sala = 1
 # Dinero inicial
 # Creamos el HUD (Ahora está fuera de la clase)
 arma_hud = sprites.create(assets.image("""
@@ -688,6 +714,7 @@ music.play(music.string_playable("E B C5 A B G A F ", 120),
 # ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 
 def on_on_update():
+    check_lives_enemys()
     mode_attack()
 game.on_update(on_on_update)
 
