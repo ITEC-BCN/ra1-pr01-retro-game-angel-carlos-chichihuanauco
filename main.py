@@ -6,8 +6,15 @@ class SpriteKind:
     tp_sala_jefe = SpriteKind.create()
     ENEMIE_PROJECTILE = SpriteKind.create()
     bullet_poryectile = SpriteKind.create()
+def mode_attack():
+    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
+        un_enemigo2.follow(mySprite, 10)
+    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    for un_enemigo22 in sprites.all_of_kind(SpriteKind.normal_bullet):
+        un_enemigo22.follow(mySprite, 30)
 
-def on_on_overlap10(sprite_player, sprite_proj):
+def on_on_overlap(sprite_player, sprite_proj):
     # Destruir el proyectil enemigo inmediatamente
     sprite_proj.destroy()
     # ⭐️ COMPROBACIÓN DE INVULNERABILIDAD ⭐️
@@ -20,22 +27,15 @@ def on_on_overlap10(sprite_player, sprite_proj):
         music.thump.play()
 sprites.on_overlap(SpriteKind.player,
     SpriteKind.ENEMIE_PROJECTILE,
-    on_on_overlap10)
-def mode_attack():
-    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
-        un_enemigo2.follow(mySprite, 10)
-    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
-    for un_enemigo22 in sprites.all_of_kind(SpriteKind.normal_bullet):
-        un_enemigo22.follow(mySprite, 30)
+    on_on_overlap)
 
 def on_up_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_UP))
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
-def on_on_overlap(sprite, otherSprite2):
+def on_on_overlap2(sprite, otherSprite2):
     mySprite.set_position(2573, 2782)
-sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_jefe, on_on_overlap)
+sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_jefe, on_on_overlap2)
 
 def on_b_pressed():
     global projectile
@@ -71,31 +71,31 @@ controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
 
 # Empujoncito final
 
-def on_on_overlap2(sprite_player, otherSprite):
+def on_on_overlap3(sprite_player2, otherSprite):
     global distancia_repulsion, delta_x, delta_y
     # Definimos la distancia de repulsión (ajustable)
     distancia_repulsion = 10
     # Un pequeño empujón es suficiente para romper el solapamiento.
     # Verificamos si la colisión es con cualquiera de los NPCs
-    delta_x = sprite_player.x - otherSprite.x
-    delta_y = sprite_player.y - otherSprite.y
+    delta_x = sprite_player2.x - otherSprite.x
+    delta_y = sprite_player2.y - otherSprite.y
     if otherSprite == npc_controles or otherSprite == npc_historia:
         # ⭐️ Lógica de Repulsión ⭐️
         # Calcular la diferencia entre las posiciones
-        delta_x = sprite_player.x - otherSprite.x
-        SpriteKind2 = sprite_player.y - otherSprite.y
+        delta_x = sprite_player2.x - otherSprite.x
+        SpriteKind2 = sprite_player2.y - otherSprite.y
         # Repulsión Horizontal (Si la diferencia es significativa)
         if abs(delta_x) > abs(delta_y):
             if delta_x > 0:
                 # Jugador a la derecha del NPC, lo empuja más a la derecha
-                sprite_player.x += distancia_repulsion
+                sprite_player2.x += distancia_repulsion
             else:
-                sprite_player.x -= distancia_repulsion
+                sprite_player2.x -= distancia_repulsion
         elif delta_y > 0:
             # Jugador debajo del NPC, lo empuja hacia abajo
-            sprite_player.y += distancia_repulsion
+            sprite_player2.y += distancia_repulsion
         else:
-            sprite_player.y -= distancia_repulsion
+            sprite_player2.y -= distancia_repulsion
     # ---------------------------
     if otherSprite == npc_controles:
         game.show_long_text("" + """
@@ -134,26 +134,27 @@ def on_on_overlap2(sprite_player, otherSprite):
             assets.image("""
                 shotgun
                 """),
-            sprite_player)
+            sprite_player2)
         intentar_comprar("rifle",
             120,
             assets.image("""
                 rifle
                 """),
-            sprite_player)
+            sprite_player2)
         intentar_comprar("Misterio",
             9999,
             assets.image("""
                 easter_egg
                 """),
-            sprite_player)
-        sprite_player.y += 10
-sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap2)
+            sprite_player2)
+        sprite_player2.y += 10
+sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap3)
 
 def on_a_pressed():
     global dodge_roll
     characterAnimations.set_character_animations_enabled(mySprite, False)
     if characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_RIGHT)):
+        dodge_roll = True
         animation.run_image_animation(mySprite,
             assets.animation("""
                 dodge_roll_rigth
@@ -164,6 +165,7 @@ def on_a_pressed():
         dodge_roll = False
         characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_RIGHT))
     elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_LEFT)):
+        dodge_roll = True
         animation.run_image_animation(mySprite,
             assets.animation("""
                 dodge_roll_left
@@ -174,6 +176,7 @@ def on_a_pressed():
         dodge_roll = False
         characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_LEFT))
     elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_DOWN)):
+        dodge_roll = True
         animation.run_image_animation(mySprite,
             assets.animation("""
                 dodge_roll_front
@@ -184,6 +187,7 @@ def on_a_pressed():
         dodge_roll = False
         characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_DOWN))
     elif characterAnimations.matches_rule(mySprite, characterAnimations.rule(Predicate.FACING_UP)):
+        dodge_roll = True
         animation.run_image_animation(mySprite,
             assets.animation("""
                 dodge_roll_back
@@ -255,7 +259,7 @@ def on_right_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_RIGHT))
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
-def on_on_overlap3(sprite_proj, otherSprite4):
+def on_on_overlap4(sprite_proj2, otherSprite4):
     global enemigo_status
     # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
     enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite4)
@@ -264,13 +268,13 @@ def on_on_overlap3(sprite_proj, otherSprite4):
         enemigo_status.value += -1
         # Reduce la vida en 1 (o el daño deseado)
         # 3. Destruir el proyectil
-        sprite_proj.destroy()
+        sprite_proj2.destroy()
         # 4. Comprobar si el enemigo muere
         if enemigo_status.value <= 0:
             otherSprite4.destroy(effects.disintegrate)
 sprites.on_overlap(SpriteKind.projectile,
     SpriteKind.normal_bullet,
-    on_on_overlap3)
+    on_on_overlap4)
 
 # ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 def spawn_enemis_multiple():
@@ -347,11 +351,11 @@ def on_down_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_DOWN))
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
-def on_on_overlap4(sprite2, otherSprite3):
+def on_on_overlap5(sprite2, otherSprite3):
     mySprite.set_position(2573, 2782)
-sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_lobby, on_on_overlap4)
+sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_lobby, on_on_overlap5)
 
-def on_on_overlap5(sprite_proj2, otherSprite42):
+def on_on_overlap6(sprite_proj22, otherSprite42):
     global enemigo_status
     # 1. Obtener la Status Bar adjunta al enemigo golpeado (otherSprite4)
     enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite42)
@@ -360,13 +364,13 @@ def on_on_overlap5(sprite_proj2, otherSprite42):
         enemigo_status.value += -1
         # Reduce la vida en 1 (o el daño deseado)
         # 3. Destruir el proyectil
-        sprite_proj2.destroy()
+        sprite_proj22.destroy()
         # 4. Comprobar si el enemigo muere
         if enemigo_status.value <= 0:
             otherSprite42.destroy(effects.disintegrate)
 sprites.on_overlap(SpriteKind.projectile,
     SpriteKind.bullet_poryectile,
-    on_on_overlap5)
+    on_on_overlap6)
 
 def cordenadas_sala1():
     global posiciones_sala1
@@ -382,10 +386,10 @@ enemigo_status: StatusBarSprite = None
 compra = False
 arma_visual: Sprite = None
 fondo_blanco: Sprite = None
-dodge_roll = False
 delta_y = 0
 delta_x = 0
 projectile: Sprite = None
+dodge_roll = False
 npc_tienda: Sprite = None
 npc_historia: Sprite = None
 npc_controles: Sprite = None
@@ -393,7 +397,7 @@ mySprite: Sprite = None
 arma_actual = ""
 arma_hud: Sprite = None
 distancia_repulsion = 0
-info.set_score(9999)
+info.set_score(0)
 info.set_life(15)
 # Dinero inicial
 # Creamos el HUD (Ahora está fuera de la clase)
