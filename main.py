@@ -53,7 +53,7 @@ def on_b_pressed():
             -200)
 controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
 
-# Nota: Asegúrate de que los sprites 'npc_controles' y 'npc_historia' estén definidos.
+# Empujoncito final
 
 def on_on_overlap2(sprite_player, otherSprite):
     global distancia_repulsion, delta_x, delta_y
@@ -111,6 +111,27 @@ def on_on_overlap2(sprite_player, otherSprite):
                 Si logras llegar y vencer a los Guardianes, el Núcleo te concederá un deseo:
                 """ + "¡Cambiar tu pasado!\n" + "¿Tienes el valor (y la munición) para intentarlo? Suerte... la necesitarás. ",
             DialogLayout.BOTTOM)
+    elif otherSprite == npc_tienda:
+        game.show_long_text("¡Bienvenido! ¿Qué te llevas hoy?", DialogLayout.BOTTOM)
+        intentar_comprar("shotgun",
+            50,
+            assets.image("""
+                shotgun
+                """),
+            sprite_player)
+        intentar_comprar("rifle",
+            120,
+            assets.image("""
+                rifle
+                """),
+            sprite_player)
+        intentar_comprar("Misterio",
+            9999,
+            assets.image("""
+                easter_egg
+                """),
+            sprite_player)
+        sprite_player.y += 10
 sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap2)
 
 def on_a_pressed():
@@ -170,6 +191,42 @@ def on_left_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_LEFT))
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
+def intentar_comprar(nombre_arma: str, precio: number, imagen_arma: Image, sprite_jugador: Sprite):
+    global fondo_blanco, arma_visual, compra, arma_actual, arma_hud
+    # 1. Crear Fondo Blanco (Tapete visual)
+    fondo_blanco = sprites.create(image.create(30, 30), SpriteKind.food)
+    fondo_blanco.image.fill(1)
+    # Color blanco
+    fondo_blanco.set_position(sprite_jugador.x, sprite_jugador.y - 40)
+    # 2. Crear el Arma Visual encima del fondo
+    arma_visual = sprites.create(imagen_arma, SpriteKind.food)
+    arma_visual.set_position(sprite_jugador.x, sprite_jugador.y - 40)
+    # 3. Preguntar si quiere comprar
+    compra = game.ask("" + nombre_arma + " ($" + ("" + str(precio)) + ")",
+        "¿Comprar?")
+    # 4. Lógica de compra
+    if compra:
+        if info.score() >= precio:
+            info.change_score_by(0 - precio)
+            arma_actual = nombre_arma
+                        
+            # --- TRUCO DE LIMPIEZA ---
+            # Si se veían superpuestos, esto fuerza a que solo haya uno
+            arma_hud.destroy() # Borramos el viejo
+            arma_hud = sprites.create(imagen_arma, SpriteKind.food) # Creamos el nuevo
+            arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
+            arma_hud.set_position(20, 105)
+            # -------------------------
+                        
+            music.ba_ding.play()
+            game.splash("¡Comprado! Tienes: " + nombre_arma)
+        else:
+            music.buzzer.play()
+            game.splash("¡No tienes dinero! Necesitas " + ("" + str(precio)))
+    # 5. Limpiar (Borrar sprites visuales)
+    arma_visual.destroy()
+    fondo_blanco.destroy()
+
 def on_right_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_RIGHT))
 controller.right.on_event(ControllerButtonEvent.RELEASED, on_right_released)
@@ -227,6 +284,12 @@ def spawn_enemis_multiple():
                 """),
             200,
             characterAnimations.rule(Predicate.FACING_RIGHT))
+        sb = statusbars.create(20, 4, StatusBarKind.health)
+        sb.attach_to_sprite(nuevo_enemigo)
+        sb.max = 3
+        # Ejemplo de vida inicial
+        sb.value = 3
+        sb.set_color(7, 2)
     cordenadas_sala1()
     for pos_tile2 in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
@@ -283,29 +346,46 @@ def cordenadas_sala1():
         [randint(2201, 1544), randint(2601, 2887)]]
 posiciones_sala1: List[List[number]] = []
 enemigo_status: StatusBarSprite = None
+compra = False
+arma_visual: Sprite = None
+fondo_blanco: Sprite = None
 dodge_roll = False
 delta_y = 0
 delta_x = 0
 projectile: Sprite = None
+npc_tienda: Sprite = None
 npc_historia: Sprite = None
 npc_controles: Sprite = None
 mySprite: Sprite = None
+arma_actual = ""
+arma_hud: Sprite = None
 distancia_repulsion = 0
+# Dinero inicial
+# Creamos el HUD (Ahora está fuera de la clase)
+arma_hud = sprites.create(assets.image("""
+    gun
+    """), SpriteKind.food)
+arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
+arma_hud.set_position(20, 105)
+# Variable de estado
+arma_actual = "pistola"
 @namespace
 class SpriteKind22:
     npc2 = SpriteKind.create()
-    info.set_score(0)
-    # Creamos un sprite para el HUD
-    arma_hud = sprites.create(assets.image("""
-        gun
-        """), SpriteKind.food)
-    SpriteKind22.arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
-    SpriteKind22.arma_hud.set_position(20, 105)
-    # Variable para saber qué arma tenemos equipada
-    arma_actual = "pistola"
     bullet_poryectile = SpriteKind.create()
     tp_sala = SpriteKind.create()
     tp_jefe = SpriteKind.create()
+    tp_sala_lobby = SpriteKind.create()
+    tp_sala_jefe = SpriteKind.create()
+    
+    # Creamos un sprite para el HUD
+    arma_hud2 = sprites.create(assets.image("""
+        gun
+        """), SpriteKind.food)
+    SpriteKind22.arma_hud2.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
+    SpriteKind22.arma_hud2.set_position(20, 105)
+    # Variable para saber qué arma tenemos equipada
+    arma_actual2 = "pistola"
 mySprite = sprites.create(assets.image("""
     myImage
     """), SpriteKind.player)
@@ -335,7 +415,7 @@ npc_controles.set_position(390, 270)
 tp_lobby_sala.set_position(330, 360)
 tp_sala_jefe2.set_position(3135, 311)
 npc_historia.set_position(390, 330)
-npc_tienda.set_position(103, 1464)
+npc_tienda.set_position(115, 1520)
 # Establecer velocidad máxima
 # Configuración de animaciones del jugador... (se mantiene igual)
 characterAnimations.loop_frames(npc_controles,
