@@ -4,7 +4,68 @@ class SpriteKind:
     npc = SpriteKind.create()
     tp_sala_lobby = SpriteKind.create()
     tp_sala_jefe = SpriteKind.create()
+    ENEMIE_PROJECTILE = SpriteKind.create()
 # --- Inicialización del Juego ---
+# --- RECUERDA ELIMINAR ESTA LÍNEA DE LAS GLOBALES: enemigo_status: StatusBarSprite = None ---
+
+def enemy_shoot_logic_simple():
+    # El bucle de persecución en mode_attack ya garantiza que los enemigos se están moviendo.
+    for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
+        
+        # 1. Creamos una variable LOCAL para el proyectil, pero la inicializamos dentro del bloque.
+        
+        velocidad_proyectil = 100
+        vx_enemigo = un_enemigo.vx
+        vy_enemigo = un_enemigo.vy
+        
+        # Usamos una variable auxiliar para el proyectil local
+        proj_a_lanzar = None
+        
+        # Determinar la dirección principal (Horizontal vs. Vertical)
+        if abs(vx_enemigo) > abs(vy_enemigo):
+            # Movimiento dominante es HORIZONTAL
+            if vx_enemigo > 0:
+                # Dispara a la DERECHA
+                proj_a_lanzar = sprites.create_projectile_from_sprite(
+                    assets.image(""" bullet_initial"""),
+                    un_enemigo,
+                    velocidad_proyectil,
+                    0
+                )
+            elif vx_enemigo < 0:
+                # Dispara a la IZQUIERDA
+                proj_a_lanzar = sprites.create_projectile_from_sprite(
+                    assets.image(""" bullet_initial"""),
+                    un_enemigo,
+                    -velocidad_proyectil,
+                    0
+                )
+        
+        elif abs(vy_enemigo) > 0:
+            # Movimiento dominante es VERTICAL
+            if vy_enemigo > 0:
+                # Dispara ABAJO
+                proj_a_lanzar = sprites.create_projectile_from_sprite(
+                    assets.image(""" bullet_initial"""),
+                    un_enemigo,
+                    0,
+                    velocidad_proyectil
+                )
+            else: # vy_enemigo < 0
+                # Dispara ARRIBA
+                proj_a_lanzar = sprites.create_projectile_from_sprite(
+                    assets.image(""" bullet_initial"""),
+                    un_enemigo,
+                    0,
+                    -velocidad_proyectil
+                )
+        
+        # 2. Si se asignó un valor (es decir, el proyectil existe), se le da el SpriteKind.
+        if proj_a_lanzar: # Esto es un atajo para if proj_a_lanzar != None:
+            proj_a_lanzar.set_kind(SpriteKind.ENEMIE_PROJECTILE)
+
+# Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)
+game.on_update_interval(1500, enemy_shoot_logic_simple)
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo in sprites.all_of_kind(SpriteKind22.bullet_poryectile):
