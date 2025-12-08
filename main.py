@@ -7,8 +7,20 @@ class SpriteKind:
     ENEMIE_PROJECTILE = SpriteKind.create()
     bullet_poryectile = SpriteKind.create()
 
-info.set_score(9999)
-
+def on_on_overlap10(sprite_player, sprite_proj):
+    # Destruir el proyectil enemigo inmediatamente
+    sprite_proj.destroy()
+    # ⭐️ COMPROBACIÓN DE INVULNERABILIDAD ⭐️
+    if dodge_roll == True:
+        pass
+    else:
+        # Si no es invulnerable, recibe daño
+        info.change_life_by(-1)
+        scene.camera_shake(2, 100)
+        music.thump.play()
+sprites.on_overlap(SpriteKind.player,
+    SpriteKind.ENEMIE_PROJECTILE,
+    on_on_overlap10)
 def mode_attack():
     # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
@@ -381,6 +393,8 @@ mySprite: Sprite = None
 arma_actual = ""
 arma_hud: Sprite = None
 distancia_repulsion = 0
+info.set_score(9999)
+info.set_life(15)
 # Dinero inicial
 # Creamos el HUD (Ahora está fuera de la clase)
 arma_hud = sprites.create(assets.image("""
@@ -397,7 +411,6 @@ class SpriteKind22:
     tp_jefe = SpriteKind.create()
     tp_sala_lobby2 = SpriteKind.create()
     tp_sala_jefe2 = SpriteKind.create()
-    
 mySprite = sprites.create(assets.image("""
     myImage
     """), SpriteKind.player)
