@@ -29,6 +29,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "gun"
     },
+    "image6": {
+        "data": "hwQoABAAAAAAAAAAAAAAAABglmkGAAAAAGCWaQYAAAAAsLu7CwAAAACwu7sLAAAAALCzuwsAAAAAsLO7uwsAAACwu7u7uwsAALCzu7u7CwAAsLO7u7u7AACws7sLsLsLALCzuwuwuwsAsLO7CwC7CwCws7sLALu7ALCzuwsAu7sAsLO7CwC7uwCws7sLALu7ALCzuwsAu7sAsLu7CwC7uwCwu7sLALu7ALC7uwsAu7sAsLu7CwC7uwCwu7sLALALALC7uwsAAAAAsLu7CwAAAAAwuzsDAAAAADC7OwMAAACwu7u7uwAAALC7u7u7CwAAsDu7u7sLAACwO7u7uwsAAAA7u7u7CwAAADuzu7sAAAAAu7O7uwAAAAC7s7u7AAAAALAzu7sAAAAAsDuzCwAAAAAAu7sLAAAAAACwuwAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "easter_egg"
+    },
     "anim9": {
         "namespace": "myAnimations",
         "id": "anim9",
