@@ -27,17 +27,17 @@ def cordenadas_sala8():
         [randint(3545, 8856), randint(1850, 1177)],
         [randint(3545, 8856), randint(1850, 1177)]]
 def mode_attack():
-    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    #  OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo2 in sprites.all_of_kind(SpriteKind.bullet_poryectile):
         un_enemigo2.follow(mySprite, 10)
-    # ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    #  OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for un_enemigo22 in sprites.all_of_kind(SpriteKind.normal_bullet):
         un_enemigo22.follow(mySprite, 30)
 
 def on_on_overlap(sprite_player, sprite_proj):
     # Destruir el proyectil enemigo inmediatamente
     sprite_proj.destroy()
-    # ⭐️ COMPROBACIÓN DE INVULNERABILIDAD ⭐️
+    #  COMPROBACIÓN DE INVULNERABILIDAD 
     if dodge_roll == True:
         pass
     else:
@@ -79,7 +79,7 @@ def on_on_overlap2(sprite_player2, otherSprite):
     delta_x = sprite_player2.x - otherSprite.x
     delta_y = sprite_player2.y - otherSprite.y
     if otherSprite == npc_controles or otherSprite == npc_historia:
-        # ⭐️ Lógica de Repulsión ⭐️
+        #  Lógica de Repulsión 
         # Calcular la diferencia entre las posiciones
         delta_x = sprite_player2.x - otherSprite.x
         SpriteKind2 = sprite_player2.y - otherSprite.y

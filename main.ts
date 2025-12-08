@@ -18,11 +18,11 @@ function cordenadas_sala8() {
 }
 
 function mode_attack() {
-    //  ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    //   OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for (let un_enemigo2 of sprites.allOfKind(SpriteKind.bullet_poryectile)) {
         un_enemigo2.follow(mySprite, 10)
     }
-    //  ⭐️ OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
+    //   OPTIMIZACIÓN: Itera sobre TODOS los enemigos para que todos sigan al jugador
     for (let un_enemigo22 of sprites.allOfKind(SpriteKind.normal_bullet)) {
         un_enemigo22.follow(mySprite, 30)
     }
@@ -31,7 +31,7 @@ function mode_attack() {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_on_overlap(sprite_player: Sprite, sprite_proj: Sprite) {
     //  Destruir el proyectil enemigo inmediatamente
     sprite_proj.destroy()
-    //  ⭐️ COMPROBACIÓN DE INVULNERABILIDAD ⭐️
+    //   COMPROBACIÓN DE INVULNERABILIDAD 
     if (dodge_roll == true) {
         
     } else {
@@ -92,7 +92,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
     delta_x = sprite_player2.x - otherSprite.x
     delta_y = sprite_player2.y - otherSprite.y
     if (otherSprite == npc_controles || otherSprite == npc_historia) {
-        //  ⭐️ Lógica de Repulsión ⭐️
+        //   Lógica de Repulsión 
         //  Calcular la diferencia entre las posiciones
         delta_x = sprite_player2.x - otherSprite.x
         SpriteKind2 = sprite_player2.y - otherSprite.y
