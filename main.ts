@@ -19,7 +19,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.MovingUp))
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_jefe, function (sprite, otherSprite2) {
-    mySprite.setPosition(267, 3000)
+    mySprite.setPosition(2573, 2782)
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingRight))) {
@@ -158,7 +158,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function (spr
     enemigo_status = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, otherSprite4)
     if (enemigo_status) {
         // 2. Reducir la vida de la barra de estado específica
-        enemigo_status.value += -5
+        enemigo_status.value += -1
         // Reduce la vida en 1 (o el daño deseado)
         // 3. Destruir el proyectil
         sprite_proj.destroy()
@@ -231,9 +231,12 @@ cordenadas_sala1()
         200,
         characterAnimations.rule(Predicate.FacingRight)
         )
-        statusbar = statusbars.create(20, 4, StatusBarKind.Health)
-        statusbar.attachToSprite(nuevo_enemigo)
-        statusbar.setColor(7, 2)
+        sb = statusbars.create(20, 4, StatusBarKind.Health)
+        sb.attachToSprite(nuevo_enemigo)
+        sb.max = 3
+        // Ejemplo de vida inicial
+        sb.value = 3
+        sb.setColor(7, 2)
     }
 }
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
@@ -256,7 +259,6 @@ function cordenadas_sala1 () {
     [randint(2201, 1544), randint(2601, 2887)]
     ]
 }
-let statusbar: StatusBarSprite = null
 let posiciones_sala1: number[][] = []
 let enemigo_status: StatusBarSprite = null
 let dodge_roll = false
@@ -296,9 +298,7 @@ let tp_sala_jefe2 = sprites.create(img`
     `, SpriteKind.tp_sala_jefe)
 npc_historia = sprites.create(assets.image`bullet_npc`, SpriteKind.npc)
 let npc_tienda = sprites.create(assets.image`dallas_shoper`, SpriteKind.npc)
-let jefe = sprites.create(assets.image`boss`, SpriteKind.Enemy)
 mySprite.setPosition(335, 316)
-jefe.setPosition(300, 2220)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
 tp_sala_jefe2.setPosition(3135, 311)

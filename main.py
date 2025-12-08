@@ -188,7 +188,7 @@ def on_on_overlap3(sprite_proj, otherSprite4):
     enemigo_status = statusbars.get_status_bar_attached_to(StatusBarKind.health, otherSprite4)
     if enemigo_status:
         # 2. Reducir la vida de la barra de estado específica
-        enemigo_status.value += -5
+        enemigo_status.value += -1
         # Reduce la vida en 1 (o el daño deseado)
         # 3. Destruir el proyectil
         sprite_proj.destroy()
@@ -201,7 +201,6 @@ sprites.on_overlap(SpriteKind.projectile,
 
 # ⭐️ NUEVA FUNCIÓN: Genera múltiples enemigos en diferentes posiciones
 def spawn_enemis_multiple():
-    global statusbar
     cordenadas_sala1()
     for pos_tile in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
@@ -228,12 +227,6 @@ def spawn_enemis_multiple():
                 """),
             200,
             characterAnimations.rule(Predicate.FACING_RIGHT))
-        sb = statusbars.create(20, 4, StatusBarKind.health)
-        sb.attach_to_sprite(nuevo_enemigo)
-        sb.max = 3
-        # Ejemplo de vida inicial
-        sb.value = 3
-        sb.set_color(7, 2)
     cordenadas_sala1()
     for pos_tile2 in posiciones_sala1:
         nuevo_enemigo = sprites.create(img("""
@@ -260,9 +253,12 @@ def spawn_enemis_multiple():
                 """),
             200,
             characterAnimations.rule(Predicate.FACING_RIGHT))
-        statusbar = statusbars.create(20, 4, StatusBarKind.health)
-        statusbar.attach_to_sprite(nuevo_enemigo)
-        statusbar.set_color(7, 2)
+        sb = statusbars.create(20, 4, StatusBarKind.health)
+        sb.attach_to_sprite(nuevo_enemigo)
+        sb.max = 3
+        # Ejemplo de vida inicial
+        sb.value = 3
+        sb.set_color(7, 2)
 
 def on_up_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_UP))
@@ -285,7 +281,6 @@ def cordenadas_sala1():
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)]]
-statusbar: StatusBarSprite = None
 posiciones_sala1: List[List[number]] = []
 enemigo_status: StatusBarSprite = None
 dodge_roll = False
