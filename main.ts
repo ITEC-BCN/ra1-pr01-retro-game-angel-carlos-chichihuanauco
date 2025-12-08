@@ -172,6 +172,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.bullet_poryectile, function 
         sprite_proj22.destroy()
         // 4. Comprobar si el enemigo muere
         if (enemigo_status.value <= 0) {
+            info.changeScoreBy(100)
             otherSprite42.destroy(effects.disintegrate)
         }
     }
@@ -342,6 +343,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function (spr
         sprite_proj2.destroy()
         // 4. Comprobar si el enemigo muere
         if (enemigo_status.value <= 0) {
+            info.changeScoreBy(100)
             otherSprite4.destroy(effects.disintegrate)
         }
     }
