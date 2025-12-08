@@ -3774,158 +3774,6 @@ cfffccccccfcfccfffffffffffffcfcffcfcccccccfff.
 .............................................
 .............................................
 `];
-            case "dallas_animation":
-            case "anim25":return [img`
-..c88ddddddbb...
-.c888eeeeeeeee..
-.c888ddddddddb..
-.c888eeeeeeeee..
-.bdddbbddbbddb..
-.eefffb22bfffe..
-.bdffff42ffffb..
-.b2ddbb22bbd2b..
-..b222eeee22b...
-...bdddddddb....
-...fccfffccf....
-..ffccdfdccff...
-..fffcdfdcfff...
-.66bfcdfdcffb66.
-6996ffdfdfff6996
-6996ffffffff6996
-.66..ffffff..66.
-.....f....f.....
-.....f....f.....
-`, img`
-................
-..c88ddddddbb...
-.c888eeeeeeeee..
-.c888ddddddddb..
-.c888eeeeeeeee..
-.bdddbbddbbddb..
-.eefffb22bfffe..
-.bdffff42ffffb..
-.b2ddbb22bbd2b..
-..b222eeee22b...
-...bdddddddb....
-...fccfffccf....
-..ffccddfccff...
-.66ffcddfcfff66.
-6996fcddfcff6996
-6996ffdddfff6996
-.66.ffffffff.66.
-.....ffffff.....
-.....f....f.....
-`, img`
-................
-..c88ddddddbb...
-.c888eeeeeeeee..
-.c888ddddddddb..
-.c888eeeeeeeee..
-.bdddbbddbbddb..
-.eefffb22bfffe..
-.bdffff42ffffb..
-.b2ddbb22bbd2b..
-..b222eeee22b...
-...bdddddddb....
-...fccfffccf....
-..ffccdfdccff...
-..fffcdfdcfff...
-.66bfcdfdcffb66.
-6996ffdfffff6996
-6996ffffffff6996
-.66..ffffff..66.
-.....f....f.....
-`, img`
-..c88ddddddbb...
-.c888eeeeeeeee..
-.c888ddddddddb..
-.c888eeeeeeeee..
-.bdddbbddbbddb..
-.eefffb22bfffe..
-.bdffff42ffffb..
-.b2ddbb22bbd2b..
-..b222eeee22b...
-...bdddddddb....
-...fccfffccf....
-..ffccdfdccff...
-..fffcdfdcfff...
-....fcdfdcff....
-.66.fcdfdcff.66.
-6996ffffffff6996
-6996ffffffff6996
-.66..f....f..66.
-.....f....f.....
-`];
-            case "cultistAnimation":
-            case "anim13":return [img`
-. . . . . . . . . . . . . . 
-. . c c a a a a a a c . . . 
-. c c c a a a a a a a c . . 
-c c c c c a c c c c a a . . 
-c f f f f f f f f f c c . . 
-c f f f f f f f f f f c c . 
-c f 4 f f f f f 4 f f c c . 
-c f f f f f f f f f f c c . 
-c c f f f f f f f c c c . . 
-. c c f f f f f c c c f . . 
-. f f f f f f f f f f c . . 
-. c a a a f a a a c c c . . 
-. e 4 4 4 4 4 4 4 e e . . . 
-. a a a 4 f 4 a c c c c . . 
-. a a a 4 f a a c c c c c . 
-. a a a a f a a c c c c c . 
-`, img`
-. . c c a a a a a a a c c . 
-. c c c a a a a a a a a c c 
-c c c c c a c c c c c a a a 
-c c f f c c f f f f c a c c 
-c f f f f f f f f f f c c c 
-c f f f f f f f f f f f c c 
-c f 4 f f f f f f 4 f f c c 
-c f f f f f f f f f f f c c 
-c f f f f f f f f f f c c c 
-c c f f f f f f f f c c c c 
-f c c f f f f f f c c c f f 
-. c a a a f a a a a c c c . 
-. c a a a f a a a a c c c . 
-c e 4 4 4 4 4 4 4 4 e e e . 
-c a a a 4 f 4 a a c c c c c 
-c a a a a f a a a c c c c . 
-`, img`
-. . . c c a a a a a a a c . 
-. . c c c a a a a a a a a c 
-. c c c c c a c c c c c a a 
-. c c f f c c f f f f c a c 
-. c f f f f f f f f f f c c 
-. c f f f f f f f f f f f c 
-. c f f f f f f f f f f f c 
-. c f 4 f f f f f f 4 f f c 
-. c f f f f f f f f f f c c 
-. f c f f f f f f f f c c f 
-. . f c f f f f f f c c f c 
-. . c f f f f f f f f f c c 
-. . c a a a f a a a a c c . 
-. . e 4 4 4 4 4 4 4 4 e e . 
-. c a a a 4 f 4 a a c c c c 
-. c a a a 4 f a a a c c c c 
-`, img`
-. . c c a a a a a a a c . . 
-. c c c a a a a a a a a c . 
-c c c c c a c c c c c a a c 
-c c f f c c f f f f c a c c 
-c f f f f f f f f f f c c c 
-c f f f f f f f f f f f c c 
-c f 4 f f f f f f 4 f f c c 
-c f f f f f f f f f f f c c 
-f c f f f f f f f f c c f c 
-. f c f f f f f f c c f c c 
-. c f f f f f f f f f c c c 
-. c a a a f a a a a c c c c 
-. e 4 4 4 4 4 4 4 4 e e . . 
-c a a a 4 f 4 a a c c c . . 
-c a a a 4 f a a a c c c c . 
-c a a a 4 f a a a c c c c . 
-`];
             case "Bullet_NPC_Animation":
             case "anim15":return [img`
 ......bbbb......
@@ -4541,6 +4389,228 @@ ccbbbbbbb.........
 ..cbbbbbbbbbc.....
 ......bbbbbb......
 ........cbbc......
+`];
+            case "cultistAnimation":
+            case "anim13":return [img`
+. . . . . . . . . . . . . . 
+. . c c a a a a a a c . . . 
+. c c c a a a a a a a c . . 
+c c c c c a c c c c a a . . 
+c f f f f f f f f f c c . . 
+c f f f f f f f f f f c c . 
+c f 4 f f f f f 4 f f c c . 
+c f f f f f f f f f f c c . 
+c c f f f f f f f c c c . . 
+. c c f f f f f c c c f . . 
+. f f f f f f f f f f c . . 
+. c a a a f a a a c c c . . 
+. e 4 4 4 4 4 4 4 e e . . . 
+. a a a 4 f 4 a c c c c . . 
+. a a a 4 f a a c c c c c . 
+. a a a a f a a c c c c c . 
+`, img`
+. . c c a a a a a a a c c . 
+. c c c a a a a a a a a c c 
+c c c c c a c c c c c a a a 
+c c f f c c f f f f c a c c 
+c f f f f f f f f f f c c c 
+c f f f f f f f f f f f c c 
+c f 4 f f f f f f 4 f f c c 
+c f f f f f f f f f f f c c 
+c f f f f f f f f f f c c c 
+c c f f f f f f f f c c c c 
+f c c f f f f f f c c c f f 
+. c a a a f a a a a c c c . 
+. c a a a f a a a a c c c . 
+c e 4 4 4 4 4 4 4 4 e e e . 
+c a a a 4 f 4 a a c c c c c 
+c a a a a f a a a c c c c . 
+`, img`
+. . . c c a a a a a a a c . 
+. . c c c a a a a a a a a c 
+. c c c c c a c c c c c a a 
+. c c f f c c f f f f c a c 
+. c f f f f f f f f f f c c 
+. c f f f f f f f f f f f c 
+. c f f f f f f f f f f f c 
+. c f 4 f f f f f f 4 f f c 
+. c f f f f f f f f f f c c 
+. f c f f f f f f f f c c f 
+. . f c f f f f f f c c f c 
+. . c f f f f f f f f f c c 
+. . c a a a f a a a a c c . 
+. . e 4 4 4 4 4 4 4 4 e e . 
+. c a a a 4 f 4 a a c c c c 
+. c a a a 4 f a a a c c c c 
+`, img`
+. . c c a a a a a a a c . . 
+. c c c a a a a a a a a c . 
+c c c c c a c c c c c a a c 
+c c f f c c f f f f c a c c 
+c f f f f f f f f f f c c c 
+c f f f f f f f f f f f c c 
+c f 4 f f f f f f 4 f f c c 
+c f f f f f f f f f f f c c 
+f c f f f f f f f f c c f c 
+. f c f f f f f f c c f c c 
+. c f f f f f f f f f c c c 
+. c a a a f a a a a c c c c 
+. e 4 4 4 4 4 4 4 4 e e . . 
+c a a a 4 f 4 a a c c c . . 
+c a a a 4 f a a a c c c c . 
+c a a a 4 f a a a c c c c . 
+`];
+            case "dallas_animation":
+            case "anim25":return [img`
+..c88ddddddbb...
+.c888eeeeeeeee..
+.c888ddddddddb..
+.c888eeeeeeeee..
+.bdddbbddbbddb..
+.eefffb22bfffe..
+.bdffff42ffffb..
+.b2ddbb22bbd2b..
+..b222eeee22b...
+...bdddddddb....
+...fccfffccf....
+..ffccdfdccff...
+..fffcdfdcfff...
+.66bfcdfdcffb66.
+6996ffdfdfff6996
+6996ffffffff6996
+.66..ffffff..66.
+.....f....f.....
+.....f....f.....
+`, img`
+................
+..c88ddddddbb...
+.c888eeeeeeeee..
+.c888ddddddddb..
+.c888eeeeeeeee..
+.bdddbbddbbddb..
+.eefffb22bfffe..
+.bdffff42ffffb..
+.b2ddbb22bbd2b..
+..b222eeee22b...
+...bdddddddb....
+...fccfffccf....
+..ffccddfccff...
+.66ffcddfcfff66.
+6996fcddfcff6996
+6996ffdddfff6996
+.66.ffffffff.66.
+.....ffffff.....
+.....f....f.....
+`, img`
+................
+..c88ddddddbb...
+.c888eeeeeeeee..
+.c888ddddddddb..
+.c888eeeeeeeee..
+.bdddbbddbbddb..
+.eefffb22bfffe..
+.bdffff42ffffb..
+.b2ddbb22bbd2b..
+..b222eeee22b...
+...bdddddddb....
+...fccfffccf....
+..ffccdfdccff...
+..fffcdfdcfff...
+.66bfcdfdcffb66.
+6996ffdfffff6996
+6996ffffffff6996
+.66..ffffff..66.
+.....f....f.....
+`, img`
+..c88ddddddbb...
+.c888eeeeeeeee..
+.c888ddddddddb..
+.c888eeeeeeeee..
+.bdddbbddbbddb..
+.eefffb22bfffe..
+.bdffff42ffffb..
+.b2ddbb22bbd2b..
+..b222eeee22b...
+...bdddddddb....
+...fccfffccf....
+..ffccdfdccff...
+..fffcdfdcfff...
+....fcdfdcff....
+.66.fcdfdcff.66.
+6996ffffffff6996
+6996ffffffff6996
+.66..f....f..66.
+.....f....f.....
+`];
+            case "cultistAnimation0":
+            case "anim29":return [img`
+. . . . . . . . . . . . . . 
+. . c c a a a a a a c . . . 
+. c c c a a a a a a a c . . 
+c c c c c a c c c c a a . . 
+c f f f f f f f f f c c . . 
+c f f f f f f f f f f c c . 
+c f 4 f f f f f 4 f f c c . 
+c f f f f f f f f f f c c . 
+c c f f f f f f f c c c . . 
+. c c f f f f f c c c f . . 
+. f f f f f f f f f f c . . 
+. c a a a f a a a c c c . . 
+. e 4 4 4 4 4 4 4 e e . . . 
+. a a a 4 f 4 a c c c c . . 
+. a a a 4 f a a c c c c c . 
+. a a a a f a a c c c c c . 
+`, img`
+. . c c a a a a a a a c c . 
+. c c c a a a a a a a a c c 
+c c c c c a c c c c c a a a 
+c c f f c c f f f f c a c c 
+c f f f f f f f f f f c c c 
+c f f f f f f f f f f f c c 
+c f 4 f f f f f f 4 f f c c 
+c f f f f f f f f f f f c c 
+c f f f f f f f f f f c c c 
+c c f f f f f f f f c c c c 
+f c c f f f f f f c c c f f 
+. c a a a f a a a a c c c . 
+. c a a a f a a a a c c c . 
+c e 4 4 4 4 4 4 4 4 e e e . 
+c a a a 4 f 4 a a c c c c c 
+c a a a a f a a a c c c c . 
+`, img`
+. . . c c a a a a a a a c . 
+. . c c c a a a a a a a a c 
+. c c c c c a c c c c c a a 
+. c c f f c c f f f f c a c 
+. c f f f f f f f f f f c c 
+. c f f f f f f f f f f f c 
+. c f f f f f f f f f f f c 
+. c f 4 f f f f f f 4 f f c 
+. c f f f f f f f f f f c c 
+. f c f f f f f f f f c c f 
+. . f c f f f f f f c c f c 
+. . c f f f f f f f f f c c 
+. . c a a a f a a a a c c . 
+. . e 4 4 4 4 4 4 4 4 e e . 
+. c a a a 4 f 4 a a c c c c 
+. c a a a 4 f a a a c c c c 
+`, img`
+. . c c a a a a a a a c . . 
+. c c c a a a a a a a a c . 
+c c c c c a c c c c c a a c 
+c c f f c c f f f f c a c c 
+c f f f f f f f f f f c c c 
+c f f f f f f f f f f f c c 
+c f 4 f f f f f f 4 f f c c 
+c f f f f f f f f f f f c c 
+f c f f f f f f f f c c f c 
+. f c f f f f f f c c f c c 
+. c f f f f f f f f f c c c 
+. c a a a f a a a a c c c c 
+. e 4 4 4 4 4 4 4 4 e e . . 
+c a a a 4 f 4 a a c c c . . 
+c a a a 4 f a a a c c c c . 
+c a a a 4 f a a a c c c c . 
 `];
         }
         return null;

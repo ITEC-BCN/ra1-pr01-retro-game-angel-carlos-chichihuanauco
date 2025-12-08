@@ -121,7 +121,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function (sprite_player2, o
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_jefe, function (sprite, otherSprite2) {
-    mySprite.setPosition(2573, 2782)
+    mySprite.setPosition(270, 3000)
+    music.stopAllSounds()
+    music.setVolume(75)
+    music.play(music.stringPlayable("C F D C E C G D ", 120), music.PlaybackMode.LoopingInBackground)
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.FacingRight)) || characterAnimations.matchesRule(mySprite, characterAnimations.rule(Predicate.MovingRight))) {
@@ -396,6 +399,9 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.normal_bullet, function (spr
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_lobby, function (sprite2, otherSprite3) {
     mySprite.setPosition(2573, 2782)
+    music.stopAllSounds()
+    music.setVolume(75)
+    music.play(music.stringPlayable("F E D A B A E E ", 120), music.PlaybackMode.LoopingInBackground)
 })
 function cordenadas_sala4 () {
     posiciones_sala1 = [
@@ -499,6 +505,14 @@ npc_tienda.setPosition(115, 1520)
 // Establecer velocidad máxima
 // Configuración de animaciones del jugador... (se mantiene igual)
 characterAnimations.loopFrames(
+npc_tienda,
+assets.animation`dallas_animation`,
+400,
+characterAnimations.rule(Predicate.NotMoving)
+)
+// Establecer velocidad máxima
+// Configuración de animaciones del jugador... (se mantiene igual)
+characterAnimations.loopFrames(
 npc_controles,
 assets.animation`cultistAnimation`,
 300,
@@ -567,6 +581,8 @@ spawn_enemis_multiple()
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 tiles.setCurrentTilemap(tilemap`first_dungeon`)
+music.setVolume(75)
+music.play(music.stringPlayable("E B C5 A B G A F ", 120), music.PlaybackMode.LoopingInBackground)
 // ⭐️ Opcional: Implementar aquí la lógica de animación por dirección para los enemigos
 game.onUpdate(function () {
     mode_attack()
