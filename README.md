@@ -43,3 +43,18 @@ El objetivo es sencillo: **Sobrevive, limpia las salas y avanza**. Debes elimina
 
 Aunque puedes ingresar a lasala del jefe en cualquier momento, es mejor que limpies la sala y consigaspuntos para obetner las mejores armas y mejorar tu salud.
 
+## Asstets del juego
+**Fuente principal:** Todos los assets son provinientes de la pagina [spriters-resource](https://www.spriters-resource.com/pc_computer/enterthegungeon/) especificamente, los assets provienen de un juego ya existente llamado *Enter the gungeon*. La mayoria de los assets de nuestro juego provienen de esta fuente, pero destacaremos los assets del personaje jugable, porque es el personaje principal del juego y el que cuenta con mas animaciones de todo el juego.
+
+<div align="center">
+
+### Animaciones de pie
+![Animación Still](https://raw.githubusercontent.com/ITEC-BCN/ra1-pr01-retro-game-angel-carlos-chichihuanauco/9348120d0b854e5742fd648a5533bc21e9171351/img/assests_animacion_still.png)
+
+### Animaciones corriendo
+![Animación Corriendo](https://raw.githubusercontent.com/ITEC-BCN/ra1-pr01-retro-game-angel-carlos-chichihuanauco/9348120d0b854e5742fd648a5533bc21e9171351/img/assests_animacion_runnig.png)
+
+### Animaciones de giro
+![Animación Giro](https://raw.githubusercontent.com/ITEC-BCN/ra1-pr01-retro-game-angel-carlos-chichihuanauco/9348120d0b854e5742fd648a5533bc21e9171351/img/assests_animacion_dodge_rools.png)
+
+</div>
