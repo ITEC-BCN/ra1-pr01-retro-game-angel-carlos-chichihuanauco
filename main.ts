@@ -599,7 +599,6 @@ function check_current_sala() {
         cordenadas_sala7()
     } else if (current_sala == 8) {
         cordenadas_sala8()
-        spawnBoss()
     }
     
 }
@@ -749,6 +748,7 @@ characterAnimations.loopFrames(mySprite, assets.animation`
         `, 300, characterAnimations.rule(Predicate.FacingUp))
 //  Spawneamos los enemigos
 spawn_enemis_multiple()
+spawnBoss()
 //  Spawneamos al jefe
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)

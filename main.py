@@ -585,7 +585,7 @@ def check_current_sala():
         cordenadas_sala7()
     elif current_sala == 8:
         cordenadas_sala8()
-        spawnBoss()
+        
     
     
 
@@ -787,6 +787,7 @@ characterAnimations.loop_frames(mySprite,
     characterAnimations.rule(Predicate.FACING_UP))
 # Spawneamos los enemigos
 spawn_enemis_multiple()
+spawnBoss()
 # Spawneamos al jefe
 controller.move_sprite(mySprite)
 scene.camera_follow_sprite(mySprite)
