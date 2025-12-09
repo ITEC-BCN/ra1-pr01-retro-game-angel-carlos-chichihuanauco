@@ -57,4 +57,9 @@ Aunque puedes ingresar a lasala del jefe en cualquier momento, es mejor que limp
 ### Animaciones de giro
 ![Animación Giro](https://raw.githubusercontent.com/ITEC-BCN/ra1-pr01-retro-game-angel-carlos-chichihuanauco/9348120d0b854e5742fd648a5533bc21e9171351/img/assests_animacion_dodge_rools.png)
 
+### Enemigo caminante
+![Animación Giro](https://github.com/ITEC-BCN/ra1-pr01-retro-game-angel-carlos-chichihuanauco/blob/c0414deb9cebfcb753e13e3fc2d6b3e9276db875/img/asset_enemi_walk.png)
+
 </div>
+
+[Mira una demo del juego (Video)](https://drive.google.com/file/d/1vBe_b5NitmjbqPHSxwEHXNEW7XalXfwP/view?usp=sharing)
