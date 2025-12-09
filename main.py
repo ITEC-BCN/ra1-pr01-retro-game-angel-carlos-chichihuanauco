@@ -8,6 +8,7 @@ class SpriteKind:
     bullet_poryectile = SpriteKind.create()
     # Definimos los tipos para el jefe y su explosion
     Boss = SpriteKind.create()
+    FinalBoss = SpriteKind.create()
     ExplosionMortal = SpriteKind.create()
 
 def cordenadas_sala3():
@@ -165,6 +166,7 @@ sprites.on_overlap(SpriteKind.player, SpriteKind.npc, on_on_overlap2)
 
 def on_on_overlap3(sprite, otherSprite2):
     mySprite.set_position(270, 3000)
+    spawnFinalBoss()
     music.stop_all_sounds()
     music.set_volume(75)
     music.play(music.string_playable("C F D C E C G D ", 120),
@@ -392,7 +394,7 @@ def spawnBoss():
     boss_anim_start = assets.animation("bullet_key_right")[0]
     boss = sprites.create(boss_anim_start, SpriteKind.Boss)
     # Posicion aleatoria en la sala
-    boss.set_position(3123, 1200)
+    boss.set_position(3039, 1345)
     
     # Configuramos animaciones de movimiento
     characterAnimations.loop_frames(boss, assets.animation("bullet_key_left"), 200, characterAnimations.rule(Predicate.FACING_LEFT))
@@ -404,6 +406,31 @@ def spawnBoss():
     sb_boss.max = 100
     sb_boss.value = 100
     sb_boss.set_color(2, 4)
+
+def spawnFinalBoss():
+    global is_boss_spawned
+    # 1. Obtener la lista COMPLETA de frames de la animación
+    boss_frames = assets.animation("boss_attack")
+    
+    # 2. Usamos el PRIMER frame para crear el sprite
+    boss = sprites.create(boss_frames[0], SpriteKind.FinalBoss)
+    
+    # 3. Ejecutar la animación en bucle (True) con TODOS los frames ⭐️
+    animation.run_image_animation(
+        boss,
+        boss_frames, # Lista completa de imágenes
+        300,         # Velocidad (ajustada a 200ms para un bucle visible)
+        True         # Bucle (looping) = True
+    )
+    
+    # Posicionamiento y Status Bar (se mantienen)
+    boss.set_position(324, 2229)
+    sb_boss = statusbars.create(20, 4, StatusBarKind.health)
+    sb_boss.attach_to_sprite(boss)
+    sb_boss.max = 250
+    sb_boss.value = 250
+    sb_boss.set_color(2, 4)
+    is_boss_spawned = True
 
 def on_up_released():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.FACING_UP))
@@ -447,6 +474,18 @@ def on_hit_boss(sprite_proj, boss_sprite):
             boss_sprite.destroy()
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.Boss, on_hit_boss)
 
+def on_hit_Finalboss(sprite_proj, boss_sprite):
+    status_jefe = statusbars.get_status_bar_attached_to(StatusBarKind.health, boss_sprite)
+    if status_jefe:
+        daño = sprites.read_data_number(sprite_proj, "damage")
+        if daño == 0: daño = 1
+        status_jefe.value -= daño
+        sprite_proj.destroy()
+        if status_jefe.value <= 0:
+            info.change_score_by(500)
+            boss_sprite.destroy()
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.FinalBoss, on_hit_Finalboss)
+
 # El jefe daña al jugador al tocarlo
 def on_boss_hit_player(player_sprite, boss_sprite):
     if dodge_roll: return
@@ -461,6 +500,30 @@ def on_boss_hit_player(player_sprite, boss_sprite):
     pause(500)
 sprites.on_overlap(SpriteKind.player, SpriteKind.Boss, on_boss_hit_player)
 
+# El jefe final daña al jugador al tocarlo
+def on_finalboss_hit_player(player_sprite: Sprite, final_boss_sprite: Sprite):
+    global dodge_roll
+    # 1. Comprueba la invulnerabilidad
+    if dodge_roll:
+        return
+    # 2. Aplica el daño (Aumentamos el daño por ser el jefe final)
+    info.change_life_by(-3) 
+    # 3. Efectos
+    scene.camera_shake(6, 600) # Más fuerte y largo que el jefe normal
+    music.thump.play()
+    # 4. Rebote para romper el solapamiento
+    if player_sprite.x < final_boss_sprite.x:
+        player_sprite.x -= 30 # Rebote más fuerte
+    else:
+        player_sprite.x += 30
+    
+    # 5. Pausa/Inmunidad temporal post-hit
+    # Esto evita el daño instantáneo repetido por estar encima del jefe
+    pause(500)
+
+# 6. Registrar el evento de colisión para el jefe final
+sprites.on_overlap(SpriteKind.player, SpriteKind.FinalBoss, on_finalboss_hit_player)
+
 # Evento al destruir al jefe (explosion)
 def on_boss_destroyed(boss_sprite):
     # Usamos el primer cuadro de la animacion de muerte para crear la explosion
@@ -473,6 +536,26 @@ def on_boss_destroyed(boss_sprite):
     explosion.lifespan = 1000
     music.big_crash.play()
 sprites.on_destroyed(SpriteKind.Boss, on_boss_destroyed)
+
+# Evento al destruir al Jefe Final
+def on_final_boss_destroyed(boss_sprite: Sprite):
+    # Duración de la animación de muerte (200ms por frame * 5 frames = 1000ms)
+    DURACION_ANIMACION = 1000
+    # 1. Obtenemos la animación de muerte del jefe final
+    anim_kill_final = assets.animation("boss_kill")
+    # 2. Creamos el sprite de explosión (usando el primer frame de la animación)
+    explosion = sprites.create(anim_kill_final[0], SpriteKind.ExplosionMortal)
+    explosion.set_position(boss_sprite.x, boss_sprite.y)
+    # 3. Ejecutamos la animación completa
+    animation.run_image_animation(explosion, anim_kill_final, 200, False)
+    explosion.lifespan = DURACION_ANIMACION
+    music.big_crash.play() 
+    pause(DURACION_ANIMACION)
+    # 4. Mostrar el mensaje después de que la animación termine
+    game.splash("¡Jefe Final Derrotado!")
+    game.over(True, effects.smiles)
+    game.reset()
+sprites.on_destroyed(SpriteKind.FinalBoss, on_final_boss_destroyed)
 
 # La explosion daña al jugador si lo toca
 def on_explosion_hit_player(player_sprite, explosion_sprite):
@@ -502,6 +585,9 @@ def check_current_sala():
         cordenadas_sala7()
     elif current_sala == 8:
         cordenadas_sala8()
+        spawnBoss()
+    
+    
 
 def check_lives_enemys():
     global current_sala
@@ -547,6 +633,8 @@ def cordenadas_sala1():
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)],
         [randint(2201, 1544), randint(2601, 2887)]]
+
+
 def cordenadas_sala7():
     global posiciones_sala1
     posiciones_sala1 = [[randint(2714, 2200), randint(1450, 1177)],
@@ -615,6 +703,7 @@ npc_historia = sprites.create(assets.image("""
 npc_tienda = sprites.create(assets.image("""
     dallas_shoper
     """), SpriteKind.npc)
+is_boss_spawned = False
 mySprite.set_position(335, 316)
 npc_controles.set_position(390, 270)
 tp_lobby_sala.set_position(330, 360)
@@ -697,7 +786,7 @@ characterAnimations.loop_frames(mySprite,
     characterAnimations.rule(Predicate.FACING_UP))
 # Spawneamos los enemigos
 spawn_enemis_multiple()
-spawnBoss() # Spawneamos al jefe
+# Spawneamos al jefe
 controller.move_sprite(mySprite)
 scene.camera_follow_sprite(mySprite)
 tiles.set_current_tilemap(tilemap("""
@@ -750,8 +839,45 @@ def on_on_update():
             vx = velocidad
         projectile = sprites.create_projectile_from_sprite(assets.image("""bullet_initial"""), mySprite, vx, vy)
         sprites.set_data_number(projectile, "damage", daño)
-
 game.on_update(on_on_update)
+
+def boss_circle_attack():
+    global is_boss_spawned
+
+    # ⭐️ CHEQUEO DE ESTADO: Ahora es doblemente seguro ⭐️
+    if is_boss_spawned == False:
+        return
+        
+    jefes_finales = sprites.all_of_kind(SpriteKind.FinalBoss)
+    
+    if not jefes_finales:
+        # Esto debería ser imposible si is_boss_spawned es True, 
+        # pero es una buena verificación de seguridad.
+        is_boss_spawned = False 
+        return
+        
+    boss_sprite = jefes_finales[0]
+    
+    # ... (Resto de la lógica de disparo circular se mantiene) ...
+    NUM_BALAS = 12
+    VELOCIDAD = 50
+    angulo_incremento = 360 / NUM_BALAS
+    
+    for i in range(NUM_BALAS):
+        angulo_actual = i * angulo_incremento
+        radians = angulo_actual * (Math.PI / 180)
+        
+        proj_boss = sprites.create_projectile_from_sprite(
+            assets.image("""bullet_boos"""),
+            boss_sprite,
+            Math.cos(radians) * VELOCIDAD,
+            Math.sin(radians) * VELOCIDAD
+        )
+        proj_boss.set_kind(SpriteKind.ENEMIE_PROJECTILE)
+        sprites.set_data_number(proj_boss, "damage", 1)
+
+# Registrar el ataque (Se ejecuta siempre, pero solo dispara si is_boss_spawned es True)
+game.on_update_interval(3000, boss_circle_attack)
 
 # --- Inicialización del Juego ---
 # Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)

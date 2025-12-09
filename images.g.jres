@@ -49,6 +49,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "rifle"
     },
+    "image10": {
+        "data": "hwQQABAAAAAAAADMzMwAAADMzMysqgwAwKyqrLqMqwDAuoyqy/+8DLDL/6yGz7wMsPr/zGrKvAyw/I/MzLy8DKz7yMzMrLsLzLqqqqr6v8usqrvLr/+8u6q6u/yvyrq7rLu7/7y8u8vAvLvKvMy7DACsu7vLzLoMAACqvLvLzAAAAACsygAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bullet_boos"
+    },
     "anim9": {
         "namespace": "myAnimations",
         "id": "anim9",

@@ -7,6 +7,7 @@ namespace SpriteKind {
     export const bullet_poryectile = SpriteKind.create()
     //  Definimos los tipos para el jefe y su explosion
     export const Boss = SpriteKind.create()
+    export const FinalBoss = SpriteKind.create()
     export const ExplosionMortal = SpriteKind.create()
 }
 
@@ -173,6 +174,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_jefe, function on_on_overlap3(sprite: Sprite, otherSprite2: Sprite) {
     mySprite.setPosition(270, 3000)
+    spawnFinalBoss()
     music.stopAllSounds()
     music.setVolume(75)
     music.play(music.stringPlayable("C F D C E C G D ", 120), music.PlaybackMode.LoopingInBackground)
@@ -389,7 +391,7 @@ function spawnBoss() {
     let boss_anim_start = assets.animation`bullet_key_right`[0]
     let boss = sprites.create(boss_anim_start, SpriteKind.Boss)
     //  Posicion aleatoria en la sala
-    boss.setPosition(3123, 1200)
+    boss.setPosition(3039, 1345)
     //  Configuramos animaciones de movimiento
     characterAnimations.loopFrames(boss, assets.animation`bullet_key_left`, 200, characterAnimations.rule(Predicate.FacingLeft))
     characterAnimations.loopFrames(boss, assets.animation`bullet_key_right`, 200, characterAnimations.rule(Predicate.FacingRight))
@@ -399,6 +401,27 @@ function spawnBoss() {
     sb_boss.max = 100
     sb_boss.value = 100
     sb_boss.setColor(2, 4)
+}
+
+function spawnFinalBoss() {
+    
+    //  1. Obtener la lista COMPLETA de frames de la animación
+    let boss_frames = assets.animation`boss_attack`
+    //  2. Usamos el PRIMER frame para crear el sprite
+    let boss = sprites.create(boss_frames[0], SpriteKind.FinalBoss)
+    //  3. Ejecutar la animación en bucle (True) con TODOS los frames ⭐️
+    animation.runImageAnimation(boss, boss_frames, 300, true)
+    //  Lista completa de imágenes
+    //  Velocidad (ajustada a 200ms para un bucle visible)
+    //  Bucle (looping) = True
+    //  Posicionamiento y Status Bar (se mantienen)
+    boss.setPosition(324, 2229)
+    let sb_boss = statusbars.create(20, 4, StatusBarKind.Health)
+    sb_boss.attachToSprite(boss)
+    sb_boss.max = 250
+    sb_boss.value = 250
+    sb_boss.setColor(2, 4)
+    is_boss_spawned = true
 }
 
 controller.up.onEvent(ControllerButtonEvent.Released, function on_up_released() {
@@ -452,6 +475,25 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Boss, function on_hit_boss(s
     }
     
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.FinalBoss, function on_hit_Finalboss(sprite_proj: Sprite, boss_sprite: Sprite) {
+    let daño: number;
+    let status_jefe = statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss_sprite)
+    if (status_jefe) {
+        daño = sprites.readDataNumber(sprite_proj, "damage")
+        if (daño == 0) {
+            daño = 1
+        }
+        
+        status_jefe.value -= daño
+        sprite_proj.destroy()
+        if (status_jefe.value <= 0) {
+            info.changeScoreBy(500)
+            boss_sprite.destroy()
+        }
+        
+    }
+    
+})
 //  El jefe daña al jugador al tocarlo
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function on_boss_hit_player(player_sprite: Sprite, boss_sprite: Sprite) {
     if (dodge_roll) {
@@ -471,6 +513,33 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function on_boss_hit_playe
     
     pause(500)
 })
+//  El jefe final daña al jugador al tocarlo
+//  6. Registrar el evento de colisión para el jefe final
+sprites.onOverlap(SpriteKind.Player, SpriteKind.FinalBoss, function on_finalboss_hit_player(player_sprite: Sprite, final_boss_sprite: Sprite) {
+    
+    //  1. Comprueba la invulnerabilidad
+    if (dodge_roll) {
+        return
+    }
+    
+    //  2. Aplica el daño (Aumentamos el daño por ser el jefe final)
+    info.changeLifeBy(-3)
+    //  3. Efectos
+    scene.cameraShake(6, 600)
+    //  Más fuerte y largo que el jefe normal
+    music.thump.play()
+    //  4. Rebote para romper el solapamiento
+    if (player_sprite.x < final_boss_sprite.x) {
+        player_sprite.x -= 30
+    } else {
+        //  Rebote más fuerte
+        player_sprite.x += 30
+    }
+    
+    //  5. Pausa/Inmunidad temporal post-hit
+    //  Esto evita el daño instantáneo repetido por estar encima del jefe
+    pause(500)
+})
 //  Evento al destruir al jefe (explosion)
 sprites.onDestroyed(SpriteKind.Boss, function on_boss_destroyed(boss_sprite: Sprite) {
     //  Usamos el primer cuadro de la animacion de muerte para crear la explosion
@@ -481,6 +550,25 @@ sprites.onDestroyed(SpriteKind.Boss, function on_boss_destroyed(boss_sprite: Spr
     animation.runImageAnimation(explosion, anim_kill, 200, false)
     explosion.lifespan = 1000
     music.bigCrash.play()
+})
+//  Evento al destruir al Jefe Final
+sprites.onDestroyed(SpriteKind.FinalBoss, function on_final_boss_destroyed(boss_sprite: Sprite) {
+    //  Duración de la animación de muerte (200ms por frame * 5 frames = 1000ms)
+    let DURACION_ANIMACION = 1000
+    //  1. Obtenemos la animación de muerte del jefe final
+    let anim_kill_final = assets.animation`boss_kill`
+    //  2. Creamos el sprite de explosión (usando el primer frame de la animación)
+    let explosion = sprites.create(anim_kill_final[0], SpriteKind.ExplosionMortal)
+    explosion.setPosition(boss_sprite.x, boss_sprite.y)
+    //  3. Ejecutamos la animación completa
+    animation.runImageAnimation(explosion, anim_kill_final, 200, false)
+    explosion.lifespan = DURACION_ANIMACION
+    music.bigCrash.play()
+    pause(DURACION_ANIMACION)
+    //  4. Mostrar el mensaje después de que la animación termine
+    game.splash("¡Jefe Final Derrotado!")
+    game.over(true, effects.smiles)
+    game.reset()
 })
 //  La explosion daña al jugador si lo toca
 sprites.onOverlap(SpriteKind.Player, SpriteKind.ExplosionMortal, function on_explosion_hit_player(player_sprite: Sprite, explosion_sprite: Sprite) {
@@ -511,6 +599,7 @@ function check_current_sala() {
         cordenadas_sala7()
     } else if (current_sala == 8) {
         cordenadas_sala8()
+        spawnBoss()
     }
     
 }
@@ -609,6 +698,7 @@ npc_historia = sprites.create(assets.image`
 npc_tienda = sprites.create(assets.image`
     dallas_shoper
     `, SpriteKind.npc)
+let is_boss_spawned = false
 mySprite.setPosition(335, 316)
 npc_controles.setPosition(390, 270)
 tp_lobby_sala.setPosition(330, 360)
@@ -658,7 +748,6 @@ characterAnimations.loopFrames(mySprite, assets.animation`
         `, 300, characterAnimations.rule(Predicate.FacingUp))
 //  Spawneamos los enemigos
 spawn_enemis_multiple()
-spawnBoss()
 //  Spawneamos al jefe
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
@@ -722,6 +811,38 @@ game.onUpdate(function on_on_update() {
         sprites.setDataNumber(projectile, "damage", daño)
     }
     
+})
+//  Registrar el ataque (Se ejecuta siempre, pero solo dispara si is_boss_spawned es True)
+game.onUpdateInterval(3000, function boss_circle_attack() {
+    let angulo_actual: number;
+    let radians: number;
+    let proj_boss: Sprite;
+    
+    //  ⭐️ CHEQUEO DE ESTADO: Ahora es doblemente seguro ⭐️
+    if (is_boss_spawned == false) {
+        return
+    }
+    
+    let jefes_finales = sprites.allOfKind(SpriteKind.FinalBoss)
+    if (!jefes_finales) {
+        //  Esto debería ser imposible si is_boss_spawned es True, 
+        //  pero es una buena verificación de seguridad.
+        is_boss_spawned = false
+        return
+    }
+    
+    let boss_sprite = jefes_finales[0]
+    //  ... (Resto de la lógica de disparo circular se mantiene) ...
+    let NUM_BALAS = 12
+    let VELOCIDAD = 50
+    let angulo_incremento = 360 / NUM_BALAS
+    for (let i = 0; i < NUM_BALAS; i++) {
+        angulo_actual = i * angulo_incremento
+        radians = angulo_actual * (Math.PI / 180)
+        proj_boss = sprites.createProjectileFromSprite(assets.image`bullet_boos`, boss_sprite, Math.cos(radians) * VELOCIDAD, Math.sin(radians) * VELOCIDAD)
+        proj_boss.setKind(SpriteKind.ENEMIE_PROJECTILE)
+        sprites.setDataNumber(proj_boss, "damage", 1)
+    }
 })
 //  --- Inicialización del Juego ---
 //  Usamos game.on_update_interval para controlar la cadencia de disparo (ej. cada 1.5 segundos)
