@@ -59,13 +59,13 @@ let stats_armas = {
     }
     ,
     "shotgun" : {
-        "damage" : 3,
+        "damage" : 5,
         "speed" : 150,
         "cooldown" : 1000,
     }
     ,
     "rifle" : {
-        "damage" : 1,
+        "damage" : 2,
         "speed" : 350,
         "cooldown" : 150,
     }
@@ -159,10 +159,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.npc, function on_on_overlap2(spr
             . . . . . . . . . . . . . . . .
         `
         intentar_comprar("Pocion", 20, poti_img, sprite_player2)
-        intentar_comprar("shotgun", 250, assets.image`
+        intentar_comprar("shotgun", 1400, assets.image`
                 shotgun
                 `, sprite_player2)
-        intentar_comprar("rifle", 420, assets.image`
+        intentar_comprar("rifle", 2100, assets.image`
                 rifle
                 `, sprite_player2)
         intentar_comprar("Misterio", 9999, assets.image`

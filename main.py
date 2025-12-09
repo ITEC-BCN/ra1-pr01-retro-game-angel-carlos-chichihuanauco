@@ -61,8 +61,8 @@ sprites.on_overlap(SpriteKind.player,
 # Configuracion de las armas
 stats_armas = {
     "pistola":  { "damage": 1, "speed": 200, "cooldown": 500 },
-    "shotgun":  { "damage": 3, "speed": 150, "cooldown": 1000 }, # Lenta pero fuerte
-    "rifle":    { "damage": 1, "speed": 350, "cooldown": 150 },  # Metralleta rapida
+    "shotgun":  { "damage": 5, "speed": 150, "cooldown": 1000 }, # Lenta pero fuerte
+    "rifle":    { "damage": 2, "speed": 350, "cooldown": 150 },  # Metralleta rapida
     "Misterio": { "damage": 10,"speed": 100, "cooldown": 2000 }  # Lenta pero devastadora
 }
 
@@ -144,13 +144,13 @@ def on_on_overlap2(sprite_player2, otherSprite):
         """)
         intentar_comprar("Pocion", 20, poti_img, sprite_player2)
         intentar_comprar("shotgun",
-            250,
+            1400,
             assets.image("""
                 shotgun
                 """),
             sprite_player2)
         intentar_comprar("rifle",
-            420,
+            2100,
             assets.image("""
                 rifle
                 """),
