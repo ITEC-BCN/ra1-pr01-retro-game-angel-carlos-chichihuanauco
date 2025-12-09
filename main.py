@@ -13,11 +13,11 @@ class SpriteKind:
 
 def cordenadas_sala3():
     global posiciones_sala1
-    posiciones_sala1 = [[randint(3336, 3128), randint(2025, 2378)],
-        [randint(3336, 3128), randint(2025, 2378)],
-        [randint(3336, 3128), randint(2025, 2378)],
-        [randint(3336, 3128), randint(2025, 2378)],
-        [randint(3336, 3128), randint(2025, 2378)]]
+    posiciones_sala1 = [[randint(3200, 3260), randint(2100, 2300)],
+            [randint(3200, 3260), randint(2100, 2300)],
+            [randint(3200, 3260), randint(2100, 2300)],
+            [randint(3200, 3260), randint(2100, 2300)],
+            [randint(3200, 3260), randint(2100, 2300)]]
 def cordenadas_sala8():
     global posiciones_sala1
     posiciones_sala1 = [[randint(3545, 8856), randint(1850, 1177)],
@@ -250,16 +250,16 @@ controller.down.on_event(ControllerButtonEvent.RELEASED, on_down_released)
 
 def cordenadas_sala2():
     global posiciones_sala1
-    posiciones_sala1 = [[randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)],
-        [randint(2873, 2021), randint(2487, 2137)]]
+    posiciones_sala1 = [[randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)],
+            [randint(2100, 2800), randint(2212, 2412)]]
 
 def on_left_pressed():
     characterAnimations.set_character_state(mySprite, characterAnimations.rule(Predicate.MOVING_LEFT))
@@ -593,6 +593,7 @@ def check_lives_enemys():
     global current_sala
     if len(sprites.all_of_kind(SpriteKind.bullet_poryectile)) == 0  and len(sprites.all_of_kind(SpriteKind.normal_bullet)) == 0:
         current_sala +=1
+        game.splash("Sala limpiada")
         spawn_enemis_multiple()
 
 def on_on_overlap7(sprite2, otherSprite3):
@@ -605,17 +606,17 @@ sprites.on_overlap(SpriteKind.player, SpriteKind.tp_sala_lobby, on_on_overlap7)
 
 def cordenadas_sala4():
     global posiciones_sala1
-    posiciones_sala1 = [[randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)],
-        [randint(2055, 1703), randint(1850, 1177)]]
+    posiciones_sala1 = [[randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)],
+            [randint(1780, 1980), randint(1250, 1775)]]
 def cordenadas_sala6():
     global posiciones_sala1
     posiciones_sala1 = [[randint(2714, 2200), randint(1847, 1609)],
@@ -626,13 +627,13 @@ def cordenadas_sala6():
         [randint(2714, 2200), randint(1847, 1609)]]
 def cordenadas_sala1():
     global posiciones_sala1
-    posiciones_sala1 = [[randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)],
-        [randint(2201, 1544), randint(2601, 2887)]]
+    posiciones_sala1 = [[randint(2190, 1550), randint(2610, 2880)],
+        [randint(2190, 1550), randint(2610, 2880)],
+        [randint(2190, 1550), randint(2610, 2880)],
+        [randint(2190, 1550), randint(2610, 2880)],
+        [randint(2190, 1550), randint(2610, 2880)],
+        [randint(2190, 1550), randint(2610, 2880)],
+        [randint(2190, 1550), randint(2610, 2880)]]
 
 
 def cordenadas_sala7():

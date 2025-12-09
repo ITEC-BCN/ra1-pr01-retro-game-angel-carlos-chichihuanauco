@@ -13,7 +13,7 @@ namespace SpriteKind {
 
 function cordenadas_sala3() {
     
-    posiciones_sala1 = [[randint(3336, 3128), randint(2025, 2378)], [randint(3336, 3128), randint(2025, 2378)], [randint(3336, 3128), randint(2025, 2378)], [randint(3336, 3128), randint(2025, 2378)], [randint(3336, 3128), randint(2025, 2378)]]
+    posiciones_sala1 = [[randint(3200, 3260), randint(2100, 2300)], [randint(3200, 3260), randint(2100, 2300)], [randint(3200, 3260), randint(2100, 2300)], [randint(3200, 3260), randint(2100, 2300)], [randint(3200, 3260), randint(2100, 2300)]]
 }
 
 function cordenadas_sala8() {
@@ -252,7 +252,7 @@ controller.down.onEvent(ControllerButtonEvent.Released, function on_down_release
 })
 function cordenadas_sala2() {
     
-    posiciones_sala1 = [[randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)], [randint(2873, 2021), randint(2487, 2137)]]
+    posiciones_sala1 = [[randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)], [randint(2100, 2800), randint(2212, 2412)]]
 }
 
 controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed() {
@@ -608,6 +608,7 @@ function check_lives_enemys() {
     
     if (sprites.allOfKind(SpriteKind.bullet_poryectile).length == 0 && sprites.allOfKind(SpriteKind.normal_bullet).length == 0) {
         current_sala += 1
+        game.splash("Sala limpiada")
         spawn_enemis_multiple()
     }
     
@@ -621,7 +622,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.tp_sala_lobby, function on_on_ov
 })
 function cordenadas_sala4() {
     
-    posiciones_sala1 = [[randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)], [randint(2055, 1703), randint(1850, 1177)]]
+    posiciones_sala1 = [[randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)], [randint(1780, 1980), randint(1250, 1775)]]
 }
 
 function cordenadas_sala6() {
@@ -631,7 +632,7 @@ function cordenadas_sala6() {
 
 function cordenadas_sala1() {
     
-    posiciones_sala1 = [[randint(2201, 1544), randint(2601, 2887)], [randint(2201, 1544), randint(2601, 2887)], [randint(2201, 1544), randint(2601, 2887)], [randint(2201, 1544), randint(2601, 2887)], [randint(2201, 1544), randint(2601, 2887)], [randint(2201, 1544), randint(2601, 2887)], [randint(2201, 1544), randint(2601, 2887)]]
+    posiciones_sala1 = [[randint(2190, 1550), randint(2610, 2880)], [randint(2190, 1550), randint(2610, 2880)], [randint(2190, 1550), randint(2610, 2880)], [randint(2190, 1550), randint(2610, 2880)], [randint(2190, 1550), randint(2610, 2880)], [randint(2190, 1550), randint(2610, 2880)], [randint(2190, 1550), randint(2610, 2880)]]
 }
 
 function cordenadas_sala7() {
