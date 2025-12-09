@@ -415,7 +415,7 @@ def spawnFinalBoss():
     # 2. Usamos el PRIMER frame para crear el sprite
     boss = sprites.create(boss_frames[0], SpriteKind.FinalBoss)
     
-    # 3. Ejecutar la animación en bucle (True) con TODOS los frames ⭐️
+    # 3. Ejecutar la animación en bucle (True) con TODOS los frames 
     animation.run_image_animation(
         boss,
         boss_frames, # Lista completa de imágenes
@@ -845,7 +845,7 @@ game.on_update(on_on_update)
 def boss_circle_attack():
     global is_boss_spawned
 
-    # ⭐️ CHEQUEO DE ESTADO: Ahora es doblemente seguro ⭐️
+    
     if is_boss_spawned == False:
         return
         

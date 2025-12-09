@@ -409,7 +409,7 @@ function spawnFinalBoss() {
     let boss_frames = assets.animation`boss_attack`
     //  2. Usamos el PRIMER frame para crear el sprite
     let boss = sprites.create(boss_frames[0], SpriteKind.FinalBoss)
-    //  3. Ejecutar la animación en bucle (True) con TODOS los frames ⭐️
+    //  3. Ejecutar la animación en bucle (True) con TODOS los frames 
     animation.runImageAnimation(boss, boss_frames, 300, true)
     //  Lista completa de imágenes
     //  Velocidad (ajustada a 200ms para un bucle visible)
@@ -819,7 +819,6 @@ game.onUpdateInterval(3000, function boss_circle_attack() {
     let radians: number;
     let proj_boss: Sprite;
     
-    //  ⭐️ CHEQUEO DE ESTADO: Ahora es doblemente seguro ⭐️
     if (is_boss_spawned == false) {
         return
     }
